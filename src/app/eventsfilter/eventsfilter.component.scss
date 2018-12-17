@@ -1,0 +1,33 @@
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calender-container {
+    display: flex;
+    flex-direction: row;
+}
+  
+.calender-container > * {
+    width: 100%;
+}
+
+.calender-container > .picker {
+    margin-right: 10px;
+    min-width: 150px;
+    width: 200px;
+}
+
+.categorie-container {
+    display: flex;
+    flex-direction: row;
+}
+.categorie-container > * {
+    width: 50%;
+}
+
+.categorie-container > .categorie {
+    min-width: 310px;
+    width: 410px;
+}

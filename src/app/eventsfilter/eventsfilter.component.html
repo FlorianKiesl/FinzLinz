@@ -1,0 +1,38 @@
+<mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+          <mat-panel-title>
+              <mat-icon>filter_list</mat-icon>
+          </mat-panel-title>
+          <mat-panel-description>
+              Kein Filter
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="filter-container">
+        <div class="calender-container">
+            <mat-form-field class="picker">
+                <input matInput [matDatepicker]="pickerVon" placeholder="Von" [formControl]="date">
+                <mat-datepicker-toggle matSuffix [for]="pickerVon"></mat-datepicker-toggle>
+                <mat-datepicker #pickerVon touchUi disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="picker">
+                <input matInput [matDatepicker]="pickerBis" placeholder="Bis" [formControl]="date">
+                <mat-datepicker-toggle matSuffix [for]="pickerBis"></mat-datepicker-toggle>
+                <mat-datepicker #pickerBis touchUi disabled="false"></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="categorie-container">
+          <mat-select class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
+            <mat-select-trigger>{{categoriesFormControl.value ? categoriesFormControl.value[0] : ''}}
+                <span *ngIf="categoriesFormControl.value?.length > 1" class="example-additional-selection">
+                  (+{{categoriesFormControl.value.length - 1}} {{categoriesFormControl.value?.length === 2 ? 'other' : 'others'}})
+                </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let category of categories" [value]="category">{{category}}</mat-option>
+          </mat-select>  
+        </div>      
+      </div>
+    </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,49 @@
+<div class="sort-container">
+  <span>{{ sortItem }}</span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>sort</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <span>Name der Veranstaltung</span>
+    </button>
+    <button mat-menu-item>
+      <span>Nächste Veranstaltungen</span>
+    </button>
+    <button mat-menu-item>
+      <span>Kategorie</span>
+    </button>
+    <button mat-menu-item>
+      <span>Ort der Veranstaltung</span>
+    </button>
+    <button mat-menu-item>
+      <span>Veranstalter</span>
+    </button>
+    <button mat-menu-item>
+      <span>Veranstaltungen in der Nähe</span>
+    </button>
+  </mat-menu>
+</div>
+
+
+<mat-card class="event-card" *ngFor="let event of events">
+  <mat-card-header>
+    <mat-card-title class="title"> {{ event.title }} </mat-card-title>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <mat-card-subtitle>Beginn: {{ event['-firstdate'] }} Ende: {{ event['-lastdate'] }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    {{ event.description | slice:0:800 }} ...
+  </mat-card-content>
+  <mat-card-actions class="action-buttons">
+      <button mat-button color="primary"><mat-icon>comment</mat-icon> Comments</button>
+      <button mat-button color="primary"><mat-icon>visibility</mat-icon> Details</button>
+      <button mat-button color="primary"><mat-icon>share</mat-icon> Share</button>
+  </mat-card-actions>
+  <mat-card-footer>
+
+  </mat-card-footer>
+</mat-card>
