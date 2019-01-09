@@ -5,6 +5,7 @@ import { EventService } from '../event.service'
 import { LocationService } from '../location.service';
 import { Location } from '../location';
 import { identifierModuleUrl } from '@angular/compiler';
+import { __await } from 'tslib';
 
 @Component({
   selector: 'app-map',
@@ -37,12 +38,12 @@ export class MapComponent implements OnInit {
     console.log('hi');
   }
 
-  async getEvents() {
-    this.events = await this.eventService.getEvents().toPromise();
+  async getEvents(): Promise<Event[]> {
+    return this.eventService.getEvents().toPromise();
   }
 
-  async getLocations() {
-    this.locations = await this.locationService.getLocations().toPromise();
+  async getLocations(): Promise<Location[]> {
+    return this.locationService.getLocations().toPromise();
   }
 
   getEventsToLocation(location_id:number): Array<Event> {
@@ -58,15 +59,11 @@ export class MapComponent implements OnInit {
     return events;
   }
 
-  onMapReady(map: Map) {
+  async onMapReady(map: Map) {
     this.map = map;
-    this.getEvents();
-    this.getLocations();
-  }
-
-  refresh() {
-    this.map.invalidateSize(); 
-
+    this.events = await this.getEvents();
+    this.locations= await this.getLocations();
+    
     for (let location of this.locations) {
       var events = this.getEventsToLocation(location["-id"]);
       if (events.length > 0){
@@ -90,11 +87,13 @@ export class MapComponent implements OnInit {
             shadowUrl: 'leaflet/marker-shadow.png'
           })
         })
-        
         m.bindPopup(html).openPopup().addTo(this.map);
-
       }
     }
+  }
+
+  refresh() {
+    this.map.invalidateSize(); 
   }
 
   doDetails() {
