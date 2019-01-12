@@ -16,7 +16,7 @@
 .calender-container > .picker {
     margin-right: 10px;
     min-width: 100px;
-    width: 200px;
+    width: 150px;
 }
 
 .categorie-container {
@@ -29,5 +29,16 @@
 
 .categorie-container > .categorie {
     min-width: 210px;
-    width: 410px;
+    width: 320px;
+}
+
+.shortcuts-container button {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.shortcuts-container > .nextdays {
+    margin-right: 8px;
+    min-width: 80px;
+    width: 80px;
 }

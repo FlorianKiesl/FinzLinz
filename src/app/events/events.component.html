@@ -33,7 +33,19 @@
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star</mat-icon></a>
-    <mat-card-subtitle>Beginn: {{ event['-firstdate'] }} Ende: {{ event['-lastdate'] }}</mat-card-subtitle>
+    <mat-card-subtitle> 
+      <p><span class="bold">Zeitraum:</span> {{ event['firstdate'] | date:'medium'}} 
+        - {{ event['lastdate'] | date:'medium'}}</p>
+      <p>
+        <span class="bold">Veranstalter: </span> 
+        <a href="{{ getOrganizer(event.organizer.id).link }}" target="_blank">
+          {{ getOrganizer(event.organizer.id).name }}
+        </a>
+      </p>
+      <p *ngIf="event['links']">
+        <a href="{{ event['links']['link'][1]['url'] }}" target="_blank">Website</a>
+      </p>
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     {{ event.description | slice:0:800 }} ...

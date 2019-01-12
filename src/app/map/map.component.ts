@@ -6,6 +6,7 @@ import { LocationService } from '../location.service';
 import { Location } from '../location';
 import { identifierModuleUrl } from '@angular/compiler';
 import { __await } from 'tslib';
+import { locateHostElement } from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-map',
@@ -47,34 +48,37 @@ export class MapComponent implements OnInit {
   }
 
   getEventsToLocation(location_id:number): Array<Event> {
-    var events = Array<Event>();
+    var eventsToLocation = Array<Event>();
     //console.log(location_id);
+    console.log(location_id);
     for (let event of this.events) {
-      //console.log(event.location["-id"]);
-      if (event.location["-id"] == location_id) {
-        events.push(event);
+      if (event.location["id"] == location_id && location_id != undefined) {
+        //console.log(event);
+        eventsToLocation.push(event);
       }
     }
 
-    return events;
+    return eventsToLocation;
   }
 
   async onMapReady(map: Map) {
     this.map = map;
     this.events = await this.getEvents();
     this.locations= await this.getLocations();
-    
+    console.log(this.locations);
     for (let location of this.locations) {
-      var events = this.getEventsToLocation(location["-id"]);
-      if (events.length > 0){
+      var eventsToLocation = this.getEventsToLocation(location["id"]);
+      if (eventsToLocation.length > 0){
+        //console.log(location);
         if (location.latitude == undefined && location.longitude == undefined) {
           //ToDo: If 2 marker will have the same longitude latitude, the first marker will be overwritten => make dictionary for places with latlng as key. BUt do this in the REST API
           location.latitude = 48.30639;
           location.longitude = 14.28611;
         }
+        //console.log(eventsToLocation);
         let html = "<p><b>" + location.name + "</b></p>";
         let htmlStar = "<i class=\"material-icons\" style=\"font-size:12px;\">star</i>";
-        for (let event of events) {
+        for (let event of eventsToLocation) {
           html = html + "<div height=\"200px\"><p>" + event.title ;
           
           html = html + "<br>" + htmlStar + htmlStar + htmlStar + htmlStar + "</p></div>"

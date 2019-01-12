@@ -4,7 +4,7 @@ export class Event {
     id: number;
     title: string;
     description: string;
-    "-firstdate": string;
-    "-lastdate": string;
+    "firstdate": Date;
+    "lastdate": Date;
     location: Location;
 }
