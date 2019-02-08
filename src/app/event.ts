@@ -7,4 +7,5 @@ export class Event {
     "firstdate": Date;
     "lastdate": Date;
     location: Location;
+    categories: any;
 }

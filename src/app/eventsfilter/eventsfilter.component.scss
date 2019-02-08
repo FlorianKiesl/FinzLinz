@@ -4,6 +4,14 @@
     align-items: center;
 }
 
+.title-container {
+    flex-direction: row;
+}
+
+.title-container > .title {
+    width: 320px;
+}
+
 .calender-container {
     display: flex;
     flex-direction: row;
@@ -30,6 +38,7 @@
 .categorie-container > .categorie {
     min-width: 210px;
     width: 320px;
+    margin-bottom: 8px;
 }
 
 .shortcuts-container button {
@@ -41,4 +50,12 @@
     margin-right: 8px;
     min-width: 80px;
     width: 80px;
+}
+
+.organizer-container {
+    display: flex;
+}
+
+.organizer-container > .organizer {
+    width: 320px;
 }

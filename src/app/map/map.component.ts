@@ -1,22 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { latLng, tileLayer, Map, marker, icon, Marker, TileLayer, Layer, Handler } from 'leaflet';
 import { Event } from '../event'
-import { EventService } from '../event.service'
 import { LocationService } from '../location.service';
 import { Location } from '../location';
-import { identifierModuleUrl } from '@angular/compiler';
 import { __await } from 'tslib';
-import { locateHostElement } from '@angular/core/src/render3/instructions';
+import { async } from '@angular/core/testing';
+import { LeafletDirective } from '@asymmetrik/ngx-leaflet';
+import { Organizer } from '../organizer';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnChanges {
+  @Input() events: Event[];
+  @Input() organizer: Organizer[];
+  
   map: Map;
-  events: Event[];
   locations: Location[];
+  mapMarkers: Marker<any>[] = [];
   
   layer: Layer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
@@ -33,14 +36,19 @@ export class MapComponent implements OnInit {
     center: latLng([ 48.30639, 14.28611 ])
   };
 
-  constructor(private eventService: EventService, private locationService: LocationService) { }
+  constructor(private locationService: LocationService) { }
 
   ngOnInit() {
-    console.log('hi');
+    //console.log(L.map('map'));
   }
 
-  async getEvents(): Promise<Event[]> {
-    return this.eventService.getEvents().toPromise();
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.map) {
+      for(var i = 0; i < this.mapMarkers.length; i++){
+        this.map.removeLayer(this.mapMarkers[i]);
+      }
+      this.redraw(this.map)
+    }
   }
 
   async getLocations(): Promise<Location[]> {
@@ -49,11 +57,8 @@ export class MapComponent implements OnInit {
 
   getEventsToLocation(location_id:number): Array<Event> {
     var eventsToLocation = Array<Event>();
-    //console.log(location_id);
-    console.log(location_id);
     for (let event of this.events) {
       if (event.location["id"] == location_id && location_id != undefined) {
-        //console.log(event);
         eventsToLocation.push(event);
       }
     }
@@ -62,10 +67,12 @@ export class MapComponent implements OnInit {
   }
 
   async onMapReady(map: Map) {
+    this.redraw(map);
+  }
+
+  async redraw(map: Map) {
     this.map = map;
-    this.events = await this.getEvents();
     this.locations= await this.getLocations();
-    console.log(this.locations);
     for (let location of this.locations) {
       var eventsToLocation = this.getEventsToLocation(location["id"]);
       if (eventsToLocation.length > 0){
@@ -91,13 +98,17 @@ export class MapComponent implements OnInit {
             shadowUrl: 'leaflet/marker-shadow.png'
           })
         })
+        this.mapMarkers.push(m);
         m.bindPopup(html).openPopup().addTo(this.map);
       }
     }
+    this.map.invalidateSize(); 
+    
   }
 
   refresh() {
     this.map.invalidateSize(); 
+    //this.redraw(this.map);
   }
 
   doDetails() {

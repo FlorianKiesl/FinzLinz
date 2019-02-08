@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
-import { EventService } from '../event.service';
 import { OrganizerService } from '../organizer.service';
 
 @Component({
@@ -10,39 +9,20 @@ import { OrganizerService } from '../organizer.service';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit {
+  @Input() events: Event[] 
+  @Input() organizers: Organizer[];
 
   sortItem: string = "Sortiert nach: ...";
-  events: Event[];
-  organizers: Organizer[];
 
-  constructor(private eventService: EventService, private organizerService: OrganizerService) { }
-
-  getEvents(): void {
-    this.eventService.getEvents().subscribe(events => {
-      this.events = events;
-    });
-  }
-
-  getOrganizers(): void {
-    this.organizerService.getOrganizers().subscribe(organizors => {
-      this.organizers = organizors;
-    });
-  }
+  constructor() { }
 
   getOrganizer(id:number): Organizer {
-    if (this.organizers) {
-      for (let item of this.organizers) {
-        if (item["id"] == id) {
-          return item;
-        }
-      }
-    }
-    return new Organizer(); 
+    return (this.organizers ? 
+      this.organizers.find(function(item){return item["id"] == id}) 
+      : undefined)
   }
 
   ngOnInit() {
-    this.getEvents();
-    this.getOrganizers();
   }
 
 }
