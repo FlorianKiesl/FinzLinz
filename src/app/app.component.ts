@@ -40,8 +40,14 @@ export class AppComponent implements OnInit {
   }
 
   onFilterChanged(filter: Map<String, any>){
+    console.log(filter.get('organizer'));
+    let itemOrganizer = this.organizers.filter(
+      organizer => organizer.name.search(filter.get('organizer')) == 0
+    )
+    console.log(itemOrganizer);
+    console.log(itemOrganizer.findIndex( organizer => organizer.id == 60990 ));
     this.filteredEvents = this.events.filter(
-      event => event.categories.category.id == 63
+      event => itemOrganizer.findIndex( organizer => organizer.id == event.organizer.id) >= 0
     );
   }
 

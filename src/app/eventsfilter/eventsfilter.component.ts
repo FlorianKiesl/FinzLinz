@@ -84,4 +84,9 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     this.filter.set("title", value);
     this.filterChanged.emit(this.filter);
   }
+
+  onFilter() {
+    this.filter.set('organizer', this.organizerFormControl.value);
+    this.filterChanged.emit(this.filter);
+  }
 }

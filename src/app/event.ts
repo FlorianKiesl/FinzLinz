@@ -8,4 +8,5 @@ export class Event {
     "lastdate": Date;
     location: Location;
     categories: any;
+    organizer: any;
 }
