@@ -1,21 +1,19 @@
 <mat-accordion>
     <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title>
-              <mat-icon>filter_list</mat-icon>
-          </mat-panel-title>
-          <mat-panel-description>
-                {{(categoriesFormControl.value || dateStart.value ? 
-                    categoriesFormControl.value : 'Kein Filter' 
-                )}}
-          </mat-panel-description>
+            <mat-panel-title>
+                <mat-icon>filter_list</mat-icon>
+            </mat-panel-title>
+            <mat-panel-description>
+                {{filtertext}}
+            </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="filter-container">
             <div class="organizer-container">
                 <mat-form-field class="organizer">
                     <input matInput type="text" placeholder="Organizer" [formControl]="organizerFormControl" [matAutocomplete]="auto">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                        <mat-option *ngFor="let organizer of filteredOrganizers | async" [value]="organizer.name">
+                        <mat-option *ngFor="let organizer of organizerOptions | async" [value]="organizer.name">
                             {{organizer.name}}
                         </mat-option>
                     </mat-autocomplete>
@@ -24,29 +22,28 @@
 
             <div class="title-container">
                 <mat-form-field class="title">
-                    <input matInput type="text" placeholder="Title" [formControl]="title" [matAutocomplete]="autot">
-                    <mat-autocomplete autoActiveFirstOption #autot="matAutocomplete">
-                        <mat-option *ngFor="let event of filteredEvents | async" [value]="event.title">
+                    <input matInput type="text" placeholder="Title" [formControl]="titleFormControl" [matAutocomplete]="autotitle">
+                    <mat-autocomplete autoActiveFirstOption #autotitle="matAutocomplete">
+                        <mat-option *ngFor="let event of eventOptions | async" [value]="event.title">
                             {{event.title}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
             </div>
 
-            <div class="shortcuts-container">
-                <button mat-button color="primary">Heute</button>
-                <button mat-button color="primary">Morgen</button>
-                <mat-form-field class="nextdays">
-                    <select matNativeControl placeholder="In">
-                        <option value="0">--</option>
-                        <option value="3">3 Tagen</option>
-                        <option value="4">4 Tagen</option>
-                        <option value="5">5 Tagen</option>
-                        <option value="6">6 Tagen</option>
-                        <option value="7">7 Tagen</option>
-                    </select>
-                </mat-form-field>
+            <div class="categorie-container">
+                <mat-form-field class="categorie">
+                    <mat-select class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
+                        <mat-select-trigger>{{categoriesFormControl.value?.length > 0 ? categoriesFormControl.value[0].name : ''}}
+                            <span *ngIf="categoriesFormControl.value?.length > 1" class="example-additional-selection">
+                            (+{{categoriesFormControl.value.length - 1}} {{categoriesFormControl.value?.length === 2 ? 'other' : 'others'}})
+                            </span>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let category of categories" [value]="category">{{category.name}}</mat-option>
+                    </mat-select> 
+                </mat-form-field> 
             </div>
+
             <div class="calender-container">
                 <mat-form-field class="picker">
                     <input matInput [matDatepicker]="pickerVon" placeholder="Von" [formControl]="dateStart">
@@ -61,20 +58,20 @@
                 </mat-form-field>
             </div>
 
-            <div class="categorie-container">
-                <mat-select class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
-                    <mat-select-trigger>{{categoriesFormControl.value ? categoriesFormControl.value[0] : ''}}
-                        <span *ngIf="categoriesFormControl.value?.length > 1" class="example-additional-selection">
-                        (+{{categoriesFormControl.value.length - 1}} {{categoriesFormControl.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                    </mat-select-trigger>
-                    <mat-option *ngFor="let category of categories" [value]="category">{{category}}</mat-option>
-                </mat-select>  
+            <div class="shortcuts-container">
+                <button mat-button color="primary" (click)="onToday()">Heute</button>
+                <button mat-button color="primary" (click)="onTomorrow()">Morgen</button>
+                <mat-form-field class="nextdays">
+                    <mat-select matNativeControl placeholder="In" [formControl]="nextDaysFormControl">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let days of nextDays" [value]="days">{{days}} Tagen</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
+
             <div class="filter-container">
                 <button mat-raised-button color="primary" (click)="onFilter()">Filter</button> 
             </div>
-              
         </div>
     </mat-expansion-panel>
 </mat-accordion>

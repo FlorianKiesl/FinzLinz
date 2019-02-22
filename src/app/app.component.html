@@ -4,7 +4,10 @@
     <span class="example-spacer"></span>
     <button mat-icon-button><mat-icon>account_box</mat-icon></button>
 </mat-toolbar>
-<app-eventsfilter (filterChanged)="onFilterChanged($event)" [events]="events" [organizers]="organizers"></app-eventsfilter>
+<app-eventsfilter (filterChanged)="onFilterChanged($event)" 
+    [events]="events" [organizers]="organizers" [categories]="categories">
+
+</app-eventsfilter>
 <mat-tab-group mat-align-tabs="center" (selectedTabChange)="map.refresh()">
     <mat-tab label="Events">
         <app-events [events]="filteredEvents" [organizers]="organizers"></app-events>
