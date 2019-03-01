@@ -6,6 +6,7 @@ import { Organizer } from './organizer';
 import { OrganizerService } from './organizer.service';
 import { Category } from './category';
 import { CategoryService } from './category.service';
+import { text } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-root',
@@ -54,13 +55,14 @@ export class AppComponent implements OnInit {
     
     if (this.events && this.organizers) {
 
-      let filteredOrganizers = filter.get('organizer') ? this.organizers.filter(
-        organizer => organizer.name.search(filter.get('organizer')) >= 0
+      let filteredOrganizers = filter.get('organizerTxt') ? this.organizers.filter(
+        organizer => organizer.name.search(filter.get('organizerTxt')) >= 0
       ) : this.organizers;
-      
-      let filteredEvents =  this.events.filter(
+
+      this.filteredEvents =  this.events.filter(
         event =>  (
-          (filter.get('title') ? event.title.search(filter.get('title')) >= 0 : true) &&
+          (filter.get('event') ? event.title.search(filter.get('event')) >= 0 : true) &&
+          (filter.get('organizerTxt') ? event.organizer['#text'].search(filter.get('organizerTxt')) >= 0 : true) &&
           (filter.get('startDate') ? 
             new Date(event.firstdate).valueOf() >= filter.get('startDate').valueOf() || 
             new Date(event.lastdate).valueOf() >= filter.get('startDate').valueOf() 
@@ -80,10 +82,6 @@ export class AppComponent implements OnInit {
               : true
           )
         )
-      );
-  
-      this.filteredEvents = filteredEvents.filter(
-        event => filteredOrganizers.findIndex( organizer => organizer.id == event.organizer.id) >= 0
       );
     } 
   }

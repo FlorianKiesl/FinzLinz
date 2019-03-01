@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ModuleWithComponentFactories } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatSelectChange } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
 import { Category } from '../category';
-import { CategoryService } from '../category.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-eventsfilter',
@@ -22,13 +21,16 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   filter: Map<String, any> = new Map();
   organizerFormControl = new FormControl();
   organizerOptions: Observable<Organizer[]>;
-  titleFormControl = new FormControl();
+  eventFormControl = new FormControl();
   eventOptions: Observable<Event[]>;
   dateStart = new FormControl(this.get_begin_of_day(new Date()));
   dateEnd = new FormControl(this.get_end_of_day(new Date()));
   nextDaysFormControl = new FormControl();
   nextDays: number[] = [3,4,5,6,7]
   categoriesFormControl = new FormControl();
+  value: string;
+
+  private filterEvents:Event[];
 
   private filtertext:string;
 
@@ -44,6 +46,28 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     if (this.nextDaysFormControl) {
       this.nextDaysFormControl.valueChanges.subscribe(value => {this.onNextDays(value)});
     }
+
+    if (this.organizerFormControl) {
+      this.organizerFormControl.valueChanges.subscribe(value => this.organizerChanged(value))
+    }
+  }
+
+  clearOrganizer(){
+    this.organizerFormControl.setValue('');
+  }
+
+  organizerChanged(value:string) {
+    this.filterEvents = this.events.filter(
+        event => event.organizer['#text'].search(value) >= 0
+      );
+    this.setEventOptions();
+  }
+
+  private setEventOptions() {
+    this.eventOptions = this.eventFormControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.get_event_options(value))
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -55,10 +79,8 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     }
     
     if (changes['events']){
-      this.eventOptions = this.titleFormControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this.get_event_options(value))
-      );
+      this.filterEvents = this.events;
+      this.setEventOptions();
     }
 
     this.onFilter();
@@ -67,16 +89,17 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   private get_organizer_options(value: string): Organizer[] {
     if (this.organizers) {
       return this.organizers.filter(
-        organizer => organizer.name.toLowerCase().indexOf(value.toLowerCase()) === 0 
+        organizer => value ? organizer.name.toLowerCase().indexOf(value.toLowerCase()) === 0 : true
       );
     }
     return [];
   }
 
   private get_event_options(value: string): Event[] {
-    if (this.events){
-      return this.events.filter(
-        event => event.title.toLowerCase().indexOf(value.toLowerCase()) === 0
+    if (this.filterEvents){
+      return this.filterEvents.filter(
+        event => 
+          (event.title.toLowerCase().indexOf(value.toLowerCase()) === 0)
       );
     }
     return [];
@@ -87,8 +110,8 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   }
 
   onFilter() {
-    this.filter.set('organizer', this.organizerFormControl.value);
-    this.filter.set('title', this.titleFormControl.value)
+    this.filter.set('organizerTxt', this.organizerFormControl.value);
+    this.filter.set('event', this.eventFormControl.value)
     this.categoriesFormControl.value == null || this.categoriesFormControl.value.length == 0 ? 
       this.filter.set('categories', null): 
       this.filter.set('categories', this.categoriesFormControl.value);

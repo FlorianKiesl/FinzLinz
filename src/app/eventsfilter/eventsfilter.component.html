@@ -11,7 +11,10 @@
         <div class="filter-container">
             <div class="organizer-container">
                 <mat-form-field class="organizer">
-                    <input matInput type="text" placeholder="Organizer" [formControl]="organizerFormControl" [matAutocomplete]="auto">
+                    <input matInput type="text" placeholder="Veranstalter" [formControl]="organizerFormControl" [matAutocomplete]="auto">
+                    <button mat-button *ngIf="organizerFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.organizerFormControl.setValue('')">
+                        <mat-icon>close</mat-icon>
+                    </button>
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                         <mat-option *ngFor="let organizer of organizerOptions | async" [value]="organizer.name">
                             {{organizer.name}}
@@ -22,7 +25,7 @@
 
             <div class="title-container">
                 <mat-form-field class="title">
-                    <input matInput type="text" placeholder="Title" [formControl]="titleFormControl" [matAutocomplete]="autotitle">
+                    <input matInput type="text" placeholder="Veranstaltung" [formControl]="eventFormControl" [matAutocomplete]="autotitle">
                     <mat-autocomplete autoActiveFirstOption #autotitle="matAutocomplete">
                         <mat-option *ngFor="let event of eventOptions | async" [value]="event.title">
                             {{event.title}}
