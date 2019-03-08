@@ -56,14 +56,7 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   getEventsToLocation(location_id:number): Array<Event> {
-    var eventsToLocation = Array<Event>();
-    for (let event of this.events) {
-      if (event.location["id"] == location_id && location_id != undefined) {
-        eventsToLocation.push(event);
-      }
-    }
-
-    return eventsToLocation;
+    return this.events.filter(item => item.location ? item.location.id == location_id : undefined)
   }
 
   async onMapReady(map: Map) {
@@ -108,7 +101,6 @@ export class MapComponent implements OnInit, OnChanges {
 
   refresh() {
     this.map.invalidateSize(); 
-    //this.redraw(this.map);
   }
 
   doDetails() {

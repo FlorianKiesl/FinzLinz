@@ -62,7 +62,10 @@ export class AppComponent implements OnInit {
       this.filteredEvents =  this.events.filter(
         event =>  (
           (filter.get('event') ? event.title.search(filter.get('event')) >= 0 : true) &&
-          (filter.get('organizerTxt') ? event.organizer['#text'].search(filter.get('organizerTxt')) >= 0 : true) &&
+          (filter.get('organizerTxt') ? 
+            (event.organizer && event.organizer['#text'] ? event.organizer['#text'].search(filter.get('organizerTxt')) >= 0 : false) 
+            : true
+          ) &&
           (filter.get('startDate') ? 
             new Date(event.firstdate).valueOf() >= filter.get('startDate').valueOf() || 
             new Date(event.lastdate).valueOf() >= filter.get('startDate').valueOf() 

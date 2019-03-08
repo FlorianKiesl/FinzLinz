@@ -16,9 +16,9 @@ export class EventsComponent implements OnInit {
 
   constructor() { }
 
-  getOrganizer(id:number): Organizer {
-    return (this.organizers ? 
-      this.organizers.find(function(item){return item["id"] == id}) 
+  getOrganizer(event:Event): Organizer {
+    return (this.organizers && event.organizer ? 
+      this.organizers.find(function(item){return item["id"] == event.organizer.id}) 
       : undefined)
   }
 

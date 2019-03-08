@@ -38,7 +38,7 @@
         - {{ event['lastdate'] | date:'medium'}}</p>
       <p>
         <span class="bold">Veranstalter: </span> 
-        <ng-container *ngIf="getOrganizer(event.organizer.id) as organizer">
+        <ng-container *ngIf="getOrganizer(event) as organizer">
           <a href="{{ organizer.link }}" target="_blank">
             {{ organizer.name }}
           </a>

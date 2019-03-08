@@ -5,7 +5,6 @@ import { map, startWith } from 'rxjs/operators';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
 import { Category } from '../category';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-eventsfilter',
@@ -58,7 +57,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   organizerChanged(value:string) {
     this.filterEvents = this.events.filter(
-        event => event.organizer['#text'].search(value) >= 0
+        event => event.organizer && event.organizer['#text'] ? event.organizer['#text'].search(value) >= 0 : false
       );
     this.setEventOptions();
   }
