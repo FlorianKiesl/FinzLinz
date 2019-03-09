@@ -26,6 +26,9 @@
             <div class="title-container">
                 <mat-form-field class="title">
                     <input matInput type="text" placeholder="Veranstaltung" [formControl]="eventFormControl" [matAutocomplete]="autotitle">
+                    <button mat-button *ngIf="eventFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.eventFormControl.setValue('')">
+                        <mat-icon>close</mat-icon>
+                    </button>
                     <mat-autocomplete autoActiveFirstOption #autotitle="matAutocomplete">
                         <mat-option *ngFor="let event of eventOptions | async" [value]="event.title">
                             {{event.title}}
@@ -36,15 +39,18 @@
 
             <div class="categorie-container">
                 <mat-form-field class="categorie">
-                    <mat-select class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
+                    <mat-select #categoriesSelection class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
                         <mat-select-trigger>{{categoriesFormControl.value?.length > 0 ? categoriesFormControl.value[0].name : ''}}
                             <span *ngIf="categoriesFormControl.value?.length > 1" class="example-additional-selection">
                             (+{{categoriesFormControl.value.length - 1}} {{categoriesFormControl.value?.length === 2 ? 'other' : 'others'}})
                             </span>
                         </mat-select-trigger>
-                        <mat-option *ngFor="let category of categories" [value]="category">{{category.name}}</mat-option>
-                    </mat-select> 
-                </mat-form-field> 
+                        <mat-option *ngFor="let category of filteredCategories" [value]="category">{{category.name}}</mat-option>
+                    </mat-select>
+                    <button mat-button *ngIf="categoriesFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearCategories(categoriesSelection)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
             </div>
 
             <div class="calender-container">
@@ -52,12 +58,18 @@
                     <input matInput [matDatepicker]="pickerVon" placeholder="Von" [formControl]="dateStart">
                     <mat-datepicker-toggle matSuffix [for]="pickerVon"></mat-datepicker-toggle>
                     <mat-datepicker #pickerVon touchUi disabled="false"></mat-datepicker>
+                    <button mat-button *ngIf="dateStart.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.dateStart.setValue(undefined)">
+                        <mat-icon>close</mat-icon>
+                    </button>
                 </mat-form-field>
 
                 <mat-form-field class="picker">
                     <input matInput [matDatepicker]="pickerBis" placeholder="Bis" [formControl]="dateEnd">
                     <mat-datepicker-toggle matSuffix [for]="pickerBis"></mat-datepicker-toggle>
                     <mat-datepicker #pickerBis touchUi disabled="false"></mat-datepicker>
+                    <button mat-button *ngIf="dateEnd.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.dateEnd.setValue(undefined)">
+                        <mat-icon>close</mat-icon>
+                    </button>
                 </mat-form-field>
             </div>
 
@@ -73,7 +85,7 @@
             </div>
 
             <div class="filter-container">
-                <button mat-raised-button color="primary" (click)="onFilter()">Filter</button> 
+                <button #filterButton mat-raised-button color="primary" (click)="onFilter()">Filter</button> 
             </div>
         </div>
     </mat-expansion-panel>

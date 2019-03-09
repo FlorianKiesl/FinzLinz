@@ -75,7 +75,6 @@ export class MapComponent implements OnInit, OnChanges {
           location.latitude = 48.30639;
           location.longitude = 14.28611;
         }
-        //console.log(eventsToLocation);
         let html = "<p><b>" + location.name + "</b></p>";
         let htmlStar = "<i class=\"material-icons\" style=\"font-size:12px;\">star</i>";
         for (let event of eventsToLocation) {

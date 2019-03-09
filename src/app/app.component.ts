@@ -52,18 +52,12 @@ export class AppComponent implements OnInit {
   }
 
   onFilterChanged(filter: Map<String, any>){
-    
     if (this.events && this.organizers) {
-
-      let filteredOrganizers = filter.get('organizerTxt') ? this.organizers.filter(
-        organizer => organizer.name.search(filter.get('organizerTxt')) >= 0
-      ) : this.organizers;
-
       this.filteredEvents =  this.events.filter(
         event =>  (
-          (filter.get('event') ? event.title.search(filter.get('event')) >= 0 : true) &&
+          (filter.get('event') ? event.title.includes(filter.get('event')) : true) &&
           (filter.get('organizerTxt') ? 
-            (event.organizer && event.organizer['#text'] ? event.organizer['#text'].search(filter.get('organizerTxt')) >= 0 : false) 
+            (event.organizer && event.organizer['#text'] ? event.organizer['#text'].includes(filter.get('organizerTxt')): false) 
             : true
           ) &&
           (filter.get('startDate') ? 
@@ -76,17 +70,17 @@ export class AppComponent implements OnInit {
             new Date(event.lastdate).valueOf() <= filter.get('endDate').valueOf()
             : true          
           ) &&
-          (
-            filter.get('categories') ? 
+          (event.categories ?
+            (filter.get('categories') ? 
               filter.get('categories').findIndex(category => 
                 Array.isArray(event.categories.category) ? 
                 event.categories.category.findIndex(item => item.id == category.id) >= 0 :
                 event.categories.category.id == category.id) >= 0
-              : true
+              : true) : false
           )
         )
       );
-    } 
+    }
   }
 
   onTabChange(event: MatTabChangeEvent){

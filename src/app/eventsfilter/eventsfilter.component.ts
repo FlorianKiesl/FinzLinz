@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ModuleWithComponentFactories } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ModuleWithComponentFactories, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
 import { Category } from '../category';
+import { MatSelect, MatButton } from '@angular/material';
+import { Button } from 'protractor';
 
 @Component({
   selector: 'app-eventsfilter',
@@ -29,7 +31,9 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   categoriesFormControl = new FormControl();
   value: string;
 
-  private filterEvents:Event[];
+  private filteredEvents:Event[];
+  private filteredOrganizers:Organizer[];
+  private filteredCategories:Category[];
 
   private filtertext:string;
 
@@ -37,9 +41,10 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   }
 
+  //ToDo: Make filterfunctions more abstract so they can be used similar as in app.component. and use lowercase everywhere
   ngOnInit() {
     if (this.categoriesFormControl) {
-      this.categoriesFormControl.valueChanges.subscribe(value => {this.categories_changed(value);});
+      this.categoriesFormControl.valueChanges.subscribe(value => {this.categoriesChanged(value);});
     }
 
     if (this.nextDaysFormControl) {
@@ -49,66 +54,111 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     if (this.organizerFormControl) {
       this.organizerFormControl.valueChanges.subscribe(value => this.organizerChanged(value))
     }
-  }
 
-  clearOrganizer(){
-    this.organizerFormControl.setValue('');
-  }
+    if (this.eventFormControl) {
+      this.eventFormControl.valueChanges.subscribe(value => this.eventChanged(value));
+    }
 
-  organizerChanged(value:string) {
-    this.filterEvents = this.events.filter(
-        event => event.organizer && event.organizer['#text'] ? event.organizer['#text'].search(value) >= 0 : false
-      );
-    this.setEventOptions();
-  }
-
-  private setEventOptions() {
-    this.eventOptions = this.eventFormControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this.get_event_options(value))
-    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if(changes['organizers']) {
-      this.organizerOptions = this.organizerFormControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this.get_organizer_options(value))
-      );
+      this.filteredOrganizers = this.events ? this.filterOrganizersByEvents(this.organizers, this.events) : this.organizers;
+      
+      this.setOrganizerOptions('');
     }
     
     if (changes['events']){
-      this.filterEvents = this.events;
-      this.setEventOptions();
+      this.filteredEvents = this.events;
+      this.filteredOrganizers = this.organizers ? this.filterOrganizersByEvents(this.organizers, this.events) : undefined;
+      this.filteredCategories = this.categories ? this.filterCategoriesByEvents(this.categories, this.events) : undefined;
+      this.setEventOptions('');
+    }
+
+    if (changes['categories']) {
+      this.filteredCategories = this.events ? this.filterCategoriesByEvents(this.categories, this.events) : this.categories;
     }
 
     this.onFilter();
   }
 
+  organizerChanged(value:string) {
+    console.log(value);
+    this.filteredEvents = this.filterEventsByOrganizer(this.events, value);
+    this.filteredCategories = this.filterCategoriesByEvents(this.categories, this.filteredEvents);
+
+    this.filteredEvents = this.categoriesFormControl.value && this.categoriesFormControl.value.length > 0 ? 
+      this.filterEventsByCategories(this.filteredEvents, this.categoriesFormControl.value) : this.filteredEvents
+    //Todo filter dates according to filteredEvents
+    
+    //Set Dates according to filteredEvents
+    console.log(this.filteredOrganizers)
+    this.setEventOptions(this.getEventFilterValue());
+  }
+
+  eventChanged(value:string) {
+    var eventList = this.filterEventsByTitle(this.events, value);
+    if (this.categoriesFormControl.value && this.categoriesFormControl.value.length > 0) {
+      eventList = this.filterEventsByCategories(eventList, this.categoriesFormControl.value)
+    }
+    //ToDo:Filter eventlist according to date
+
+    this.filteredOrganizers = this.filterOrganizersByEvents(this.organizers, eventList)
+    this.filteredCategories = this.filterCategoriesByEvents(this.categories, eventList);
+    //Set Dates according to Eventlist
+    
+    this.setOrganizerOptions(this.getOrganizerFilterValue());
+  }
+
+  private categoriesChanged(value: any) {
+    this.filteredEvents = value && value.length > 0 ? this.filterEventsByCategories(this.events, value) : this.events;
+    this.filteredOrganizers = this.filterOrganizersByEvents(this.organizers, this.filteredEvents);
+
+    this.filteredEvents = this.organizerFormControl.value ? this.filterEventsByOrganizer(this.filteredEvents, this.organizerFormControl.value) : this.filteredEvents;
+    //ToDo:Filter eventlist according to date
+
+     
+    console.log(this.filteredOrganizers)
+    //Set Dates according to Eventlist
+
+    this.setEventOptions(this.getEventFilterValue());
+    this.setOrganizerOptions(this.getOrganizerFilterValue());
+  }
+
+  private setEventOptions(start:string) {
+    this.eventOptions = this.eventFormControl.valueChanges.pipe(
+      startWith(start),
+      map(value => this.get_event_options(value))
+    );
+  }
+
+  private setOrganizerOptions(start:string) {
+    this.organizerOptions = this.organizerFormControl.valueChanges.pipe(
+      startWith(start),
+      map(value => this.get_organizer_options(value))
+    );
+  }
+
   private get_organizer_options(value: string): Organizer[] {
-    if (this.organizers) {
-      return this.organizers.filter(
-        organizer => value ? organizer.name.toLowerCase().indexOf(value.toLowerCase()) === 0 : true
+    if (this.filteredOrganizers) {
+      return this.filteredOrganizers.filter(
+        organizer => value ? organizer.name.toLowerCase().includes(value.toLowerCase()): true
       );
     }
     return [];
   }
 
   private get_event_options(value: string): Event[] {
-    if (this.filterEvents){
-      return this.filterEvents.filter(
+    if (this.filteredEvents){
+      return this.filteredEvents.filter(
         event => 
-          (event.title.toLowerCase().indexOf(value.toLowerCase()) === 0)
+          (event.title.toLowerCase().includes(value.toLowerCase()))
       );
     }
     return [];
   }
 
-  private categories_changed(value: SimpleChanges) {
-    //this.filterChanged.emit(this.filter);
-  }
-
-  onFilter() {
+  public onFilter() {
     this.filter.set('organizerTxt', this.organizerFormControl.value);
     this.filter.set('event', this.eventFormControl.value)
     this.categoriesFormControl.value == null || this.categoriesFormControl.value.length == 0 ? 
@@ -149,5 +199,83 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   private get_end_of_day(date: Date): Date {
     return new Date(date.setHours(23, 59, 59, 999));
+  }
+
+  private clearCategories(select:MatSelect) {
+    this.categoriesFormControl.setValue(undefined);
+    // select.close();
+  }
+
+  private filterEvents():void {
+    this.filteredEvents = this.events;
+
+    if (this.eventFormControl.value) {
+      this.filteredEvents =  this.filteredEvents.filter(
+        event => event.title.includes(this.eventFormControl.value)
+      )
+    }
+
+    if (this.organizerFormControl.value) {
+      this.filteredEvents =  this.filteredEvents.filter(event =>
+          (event.organizer && event.organizer['#text'] ? event.organizer['#text'].includes(this.organizerFormControl.value): false)
+      )
+    }
+
+    if (this.categoriesFormControl.value && this.categoriesFormControl.value.length > 0) {
+      this.filteredEvents =  this.filteredEvents.filter(event =>
+        (event.categories ? 
+          this.categoriesFormControl.value.findIndex(category => 
+            Array.isArray(event.categories.category) ? 
+            event.categories.category.findIndex(item => item.id == category.id) >= 0 :
+            event.categories.category.id == category.id) >= 0
+          : false)
+      )
+    }
+  }
+
+  private filterEventsByTitle(events:Event[], title:string):Event[]{
+    return events.filter(event => event.title.toLowerCase().includes(title.toLowerCase()))
+  }
+
+  private filterEventsByCategories(events:Event[], categories:Category[]):Event[]{
+    return events.filter(event =>
+      (event.categories ? 
+        categories.findIndex(category => 
+          Array.isArray(event.categories.category) ? 
+          event.categories.category.findIndex(item => item.id == category.id) >= 0 :
+          event.categories.category.id == category.id) >= 0
+        : false)
+    )
+  }
+
+  private filterEventsByOrganizer(events:Event[], organizerName:string):Event[] {
+    return events.filter(event =>
+      (event.organizer && event.organizer['#text'] ? event.organizer['#text'].toLowerCase().includes(organizerName.toLowerCase()): false)
+  )
+  }
+
+  private filterOrganizersByEvents(organizers:Organizer[], events:Event[]):Organizer[] {
+    return organizers.filter(
+      organizer => events.findIndex(event => event.organizer ? event.organizer.id == organizer.id : false) >= 0
+    );
+  }
+
+  private filterCategoriesByEvents(categories:Category[], events:Event[]):Category[] {
+    return categories.filter(category =>
+      events.findIndex(event => 
+        event.categories ? 
+        (Array.isArray(event.categories.category) ? 
+          event.categories.category.findIndex(item => item.id == category.id) >= 0 : event.categories.category.id == category.id
+        ) : false
+      ) >= 0
+    )
+  }
+
+  private getOrganizerFilterValue():string {
+    return this.organizerFormControl.value ? this.organizerFormControl.value : '';
+  }
+
+  private getEventFilterValue():string {
+    return this.eventFormControl.value ? this.eventFormControl.value : '';
   }
 }
