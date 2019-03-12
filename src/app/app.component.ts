@@ -6,7 +6,6 @@ import { Organizer } from './organizer';
 import { OrganizerService } from './organizer.service';
 import { Category } from './category';
 import { CategoryService } from './category.service';
-import { text } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-root',
@@ -81,6 +80,7 @@ export class AppComponent implements OnInit {
         )
       );
     }
+    
   }
 
   onTabChange(event: MatTabChangeEvent){

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Event } from './event';
+import { Event, EventAdapter } from './event';
 import { BaseService} from './base.service';
 import { HttpClient } from '@angular/common/http';
-import { catchError} from 'rxjs/operators';
+import { catchError, map} from 'rxjs/operators';
 import { Observable} from 'rxjs';
 
 @Injectable({
@@ -10,12 +10,13 @@ import { Observable} from 'rxjs';
 })
 export class EventService extends BaseService {
 
-  constructor (protected http: HttpClient) {
+  constructor (protected http: HttpClient, private adapter: EventAdapter) {
     super(http, 'events');
   }
 
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(this.httpURL).pipe(
+      map((data : any[]) => data.map(item => this.adapter.adapt(item))),
       catchError(super.handleError('getEvents', []))
     );
   }

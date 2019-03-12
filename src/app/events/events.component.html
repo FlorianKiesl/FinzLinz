@@ -34,8 +34,10 @@
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star</mat-icon></a>
     <mat-card-subtitle> 
-      <p><span class="bold">Zeitraum:</span> {{ event['firstdate'] | date:'medium'}} 
-        - {{ event['lastdate'] | date:'medium'}}</p>
+      <p>
+        <span class="bold">Zeitraum:</span> {{ event['firstdate'] | date:'medium'}} 
+        - {{ event['lastdate'] | date:'medium'}}
+      </p>
       <p>
         <span class="bold">Veranstalter: </span> 
         <ng-container *ngIf="getOrganizer(event) as organizer">

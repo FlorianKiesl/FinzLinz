@@ -27,7 +27,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   dateStart = new FormControl(this.get_begin_of_day(new Date()));
   dateEnd = new FormControl(this.get_end_of_day(new Date()));
   nextDaysFormControl = new FormControl();
-  nextDays: number[] = [3,4,5,6,7]
+  nextDays: number[] = [2,3,4,5,6,7]
   categoriesFormControl = new FormControl();
   value: string;
 
@@ -83,7 +83,6 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   }
 
   organizerChanged(value:string) {
-    console.log(value);
     this.filteredEvents = this.filterEventsByOrganizer(this.events, value);
     this.filteredCategories = this.filterCategoriesByEvents(this.categories, this.filteredEvents);
 
@@ -92,19 +91,19 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     //Todo filter dates according to filteredEvents
     
     //Set Dates according to filteredEvents
-    console.log(this.filteredOrganizers)
     this.setEventOptions(this.getEventFilterValue());
   }
 
   eventChanged(value:string) {
     var eventList = this.filterEventsByTitle(this.events, value);
+    this.filteredCategories = this.filterCategoriesByEvents(this.categories, eventList);
     if (this.categoriesFormControl.value && this.categoriesFormControl.value.length > 0) {
       eventList = this.filterEventsByCategories(eventList, this.categoriesFormControl.value)
     }
     //ToDo:Filter eventlist according to date
 
     this.filteredOrganizers = this.filterOrganizersByEvents(this.organizers, eventList)
-    this.filteredCategories = this.filterCategoriesByEvents(this.categories, eventList);
+
     //Set Dates according to Eventlist
     
     this.setOrganizerOptions(this.getOrganizerFilterValue());
@@ -117,8 +116,6 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     this.filteredEvents = this.organizerFormControl.value ? this.filterEventsByOrganizer(this.filteredEvents, this.organizerFormControl.value) : this.filteredEvents;
     //ToDo:Filter eventlist according to date
 
-     
-    console.log(this.filteredOrganizers)
     //Set Dates according to Eventlist
 
     this.setEventOptions(this.getEventFilterValue());
