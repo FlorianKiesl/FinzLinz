@@ -54,9 +54,9 @@ export class AppComponent implements OnInit {
     if (this.events && this.organizers) {
       this.filteredEvents =  this.events.filter(
         event =>  (
-          (filter.get('event') ? event.title.includes(filter.get('event')) : true) &&
+          (filter.get('event') ? event.title.toLowerCase().includes(filter.get('event').toLowerCase()) : true) &&
           (filter.get('organizerTxt') ? 
-            (event.organizer && event.organizer['#text'] ? event.organizer['#text'].includes(filter.get('organizerTxt')): false) 
+            (event.organizer && event.organizer['#text'] ? event.organizer['#text'].toLowerCase().includes(filter.get('organizerTxt').toLowerCase()): false) 
             : true
           ) &&
           (filter.get('startDate') ? 

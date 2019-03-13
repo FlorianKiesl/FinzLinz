@@ -5,8 +5,7 @@ import { map, startWith } from 'rxjs/operators';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
 import { Category } from '../category';
-import { MatSelect, MatButton } from '@angular/material';
-import { Button } from 'protractor';
+import { MatSelect } from '@angular/material';
 
 @Component({
   selector: 'app-eventsfilter',
@@ -34,7 +33,8 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   private filteredEvents:Event[];
   private filteredOrganizers:Organizer[];
   private filteredCategories:Category[];
-
+  private minDate:Date;
+  private maxDate:Date;
   private filtertext:string;
 
   constructor() {
@@ -83,11 +83,14 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   }
 
   organizerChanged(value:string) {
+    //Events
     this.filteredEvents = this.filterEventsByOrganizer(this.events, value);
-    this.filteredCategories = this.filterCategoriesByEvents(this.categories, this.filteredEvents);
+    this.filteredEvents = this.filterEventsByCategories(this.filteredEvents, this.categoriesFormControl.value);
 
-    this.filteredEvents = this.categoriesFormControl.value && this.categoriesFormControl.value.length > 0 ? 
-      this.filterEventsByCategories(this.filteredEvents, this.categoriesFormControl.value) : this.filteredEvents
+    //Categories
+    var eventList = this.filterEventsByOrganizer(this.events, value);
+    eventList = this.filterEventsByTitle(eventList, this.eventFormControl.value)
+    this.filteredCategories = this.filterCategoriesByEvents(this.categories, eventList);
     //Todo filter dates according to filteredEvents
     
     //Set Dates according to filteredEvents
@@ -95,14 +98,19 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   }
 
   eventChanged(value:string) {
+    //Organizers
     var eventList = this.filterEventsByTitle(this.events, value);
-    this.filteredCategories = this.filterCategoriesByEvents(this.categories, eventList);
-    if (this.categoriesFormControl.value && this.categoriesFormControl.value.length > 0) {
-      eventList = this.filterEventsByCategories(eventList, this.categoriesFormControl.value)
-    }
-    //ToDo:Filter eventlist according to date
-
+    eventList = this.filterEventsByCategories(eventList, this.categoriesFormControl.value)
     this.filteredOrganizers = this.filterOrganizersByEvents(this.organizers, eventList)
+
+    //Categories
+    eventList = this.filterEventsByTitle(this.events, value);
+    eventList = this.filterEventsByOrganizer(eventList, this.organizerFormControl.value)
+    this.filteredCategories = this.filterCategoriesByEvents(this.categories, eventList);
+
+
+    //ToDo:Filter eventlist according to date
+    
 
     //Set Dates according to Eventlist
     
@@ -110,10 +118,14 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   }
 
   private categoriesChanged(value: any) {
-    this.filteredEvents = value && value.length > 0 ? this.filterEventsByCategories(this.events, value) : this.events;
-    this.filteredOrganizers = this.filterOrganizersByEvents(this.organizers, this.filteredEvents);
+    //Organizer
+    var eventList = this.filterEventsByTitle(this.events, this.eventFormControl.value);
+    eventList = this.filterEventsByCategories(this.events, value);
+    this.filteredOrganizers = this.filterOrganizersByEvents(this.organizers, eventList);
 
-    this.filteredEvents = this.organizerFormControl.value ? this.filterEventsByOrganizer(this.filteredEvents, this.organizerFormControl.value) : this.filteredEvents;
+    //Events
+    this.filteredEvents = this.filterEventsByCategories(this.events, value);
+    this.filteredEvents = this.filterEventsByOrganizer(this.filteredEvents, this.organizerFormControl.value);
     //ToDo:Filter eventlist according to date
 
     //Set Dates according to Eventlist
@@ -230,25 +242,25 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     }
   }
 
-  private filterEventsByTitle(events:Event[], title:string):Event[]{
-    return events.filter(event => event.title.toLowerCase().includes(title.toLowerCase()))
+  private filterEventsByTitle(events:Event[], titleStr:string):Event[]{
+    return titleStr ? events.filter(event => event.title.toLowerCase().includes(titleStr.toLowerCase())) : events
   }
 
   private filterEventsByCategories(events:Event[], categories:Category[]):Event[]{
-    return events.filter(event =>
+    return categories && categories.length > 0 ? events.filter(event =>
       (event.categories ? 
         categories.findIndex(category => 
           Array.isArray(event.categories.category) ? 
           event.categories.category.findIndex(item => item.id == category.id) >= 0 :
           event.categories.category.id == category.id) >= 0
         : false)
-    )
+    ) : events;
   }
 
   private filterEventsByOrganizer(events:Event[], organizerName:string):Event[] {
-    return events.filter(event =>
+    return organizerName ? events.filter(event =>
       (event.organizer && event.organizer['#text'] ? event.organizer['#text'].toLowerCase().includes(organizerName.toLowerCase()): false)
-  )
+      ) : events
   }
 
   private filterOrganizersByEvents(organizers:Organizer[], events:Event[]):Organizer[] {

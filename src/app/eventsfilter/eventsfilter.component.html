@@ -55,7 +55,7 @@
 
             <div class="calender-container">
                 <mat-form-field class="picker">
-                    <input matInput [matDatepicker]="pickerVon" placeholder="Von" [formControl]="dateStart">
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerVon" placeholder="Von" [formControl]="dateStart">
                     <mat-datepicker-toggle matSuffix [for]="pickerVon"></mat-datepicker-toggle>
                     <mat-datepicker #pickerVon touchUi disabled="false"></mat-datepicker>
                     <button mat-button *ngIf="dateStart.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.dateStart.setValue(undefined)">

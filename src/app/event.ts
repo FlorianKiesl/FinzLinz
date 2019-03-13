@@ -47,7 +47,7 @@ export class EventAdapter implements Adapter<Event>{
 
         return new Event(
             item.id,
-            item.title,
+            item.title ? item.title : '',
             item.description,
             new Date(item.firstdate),
             new Date(item.lastdate),
