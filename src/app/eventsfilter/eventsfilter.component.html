@@ -84,8 +84,9 @@
                 </mat-form-field>
             </div>
 
-            <div class="filter-container">
-                <button #filterButton mat-raised-button color="primary" (click)="onFilter()">Filter</button> 
+            <div class="filter-cmd-container">
+                <button #filterButton mat-raised-button color="primary" (click)="onFilter()">Filter</button>
+                <button #resetButton mat-raised-button color="primary" (click)="onReset()">Reset</button> 
             </div>
         </div>
     </mat-expansion-panel>

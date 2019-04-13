@@ -40,9 +40,22 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   }
 
-  public onFilter() {
+  private onFilter() {
     let filteredEvents = this.filterEventsByTitle(this.filteredEventOptions.copyWithin(-1, -1), this.eventFormControl.value)
     this.filterChanged.emit(filteredEvents);
+  }
+
+  private onReset() {
+    this.eventFormControl.setValue('');
+    this.organizerFormControl.setValue('');
+    this.clearCategories(undefined);
+    this.dateStart.setValue(undefined);
+    this.dateEnd.setValue(undefined);
+  }
+
+  private clearCategories(select:MatSelect) {
+    this.categoriesFormControl.setValue(undefined);
+    // select.close();
   }
 
   //ToDo: Make filterfunctions more abstract so they can be used similar as in app.component. and use lowercase everywhere
@@ -237,11 +250,6 @@ export class EventsfilterComponent implements OnInit, OnChanges {
       this.dateStart.setValue(nextDays);
       this.dateEnd.setValue(nextDays);  
     }
-  }
-
-  private clearCategories(select:MatSelect) {
-    this.categoriesFormControl.setValue(undefined);
-    // select.close();
   }
 
   private filterEventsByTitle(events:Event[], titleStr:string):Event[]{
