@@ -3,6 +3,7 @@ import { EventOrganizer } from './eventOrganizer';
 import { EventOccurence } from './eventOccurence';
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
+import { strictEqual } from 'assert';
 
 export class Event {
     constructor(public id:number, public title: string, public description: string,
@@ -28,6 +29,15 @@ export class Event {
         return occurences;
     }
 
+    public isEventInTimeRange(startDate:Date, endDate:Date):boolean {
+        let firstDateCopy = new Date (new Date(this.firstdate).setHours(0, 0, 0, 0));
+        let lastDateCopy = new Date (new Date(this.lastdate).setHours(0, 0, 0, 0));
+        startDate ? startDate.setHours(0, 0, 0, 0) : false;
+        endDate ? endDate.setHours(0, 0, 0, 0): false;
+
+        return (startDate ? firstDateCopy >= startDate|| lastDateCopy >= startDate : true) && 
+            (endDate ? firstDateCopy <= endDate: true)
+    }
 }
 
 @Injectable({

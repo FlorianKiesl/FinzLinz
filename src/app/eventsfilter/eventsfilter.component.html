@@ -64,7 +64,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="picker">
-                    <input matInput [matDatepicker]="pickerBis" placeholder="Bis" [formControl]="dateEnd">
+                    <input matInput  [min]="minDate" [max]="maxDate" [matDatepicker]="pickerBis" placeholder="Bis" [formControl]="dateEnd">
                     <mat-datepicker-toggle matSuffix [for]="pickerBis"></mat-datepicker-toggle>
                     <mat-datepicker #pickerBis touchUi disabled="false"></mat-datepicker>
                     <button mat-button *ngIf="dateEnd.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.dateEnd.setValue(undefined)">
