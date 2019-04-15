@@ -55,7 +55,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   private clearCategories(select:MatSelect) {
     this.categoriesFormControl.setValue(undefined);
-    // select.close();
+    //select ? select.close() : "";
   }
 
   //ToDo: Make filterfunctions more abstract so they can be used similar as in app.component. and use lowercase everywhere
