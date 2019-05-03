@@ -8,7 +8,7 @@ import { strictEqual } from 'assert';
 export class Event {
     constructor(public id:number, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
-         public categories: any, public organizer: EventOrganizer) {
+         public categories: any, public organizer: EventOrganizer, public datumstring: string) {
     }
 
     //ToDo: Carfule with timezones they are shown in the log with the central european timezone so one our less
@@ -64,7 +64,8 @@ export class EventAdapter implements Adapter<Event>{
             occurences,
             item.location,
             item.categories,
-            item.organizer
+            item.organizer,
+            item.datumstring
         );
     }
 
