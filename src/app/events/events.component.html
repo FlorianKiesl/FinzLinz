@@ -4,24 +4,26 @@
     <mat-icon>sort</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="onSortByNameClick()">
+      <mat-icon *ngIf="sortedItem == 1">check</mat-icon>
       <span>Name der Veranstaltung</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="onSortByNextEventClick()">
+      <mat-icon *ngIf="sortedItem == 2">check</mat-icon>
       <span>Nächste Veranstaltungen</span>
     </button>
-    <button mat-menu-item>
-      <span>Kategorie</span>
-    </button>
-    <button mat-menu-item>
-      <span>Ort der Veranstaltung</span>
-    </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="onSortByOrganizerClick()">
+      <mat-icon *ngIf="sortedItem == 3">check</mat-icon>
       <span>Veranstalter</span>
     </button>
-    <button mat-menu-item>
+    <!-- <button mat-menu-item (click)="onSortByNearestEventClick()">
+      <mat-icon *ngIf="sortedItem == 4">check</mat-icon>
       <span>Veranstaltungen in der Nähe</span>
     </button>
+    <button mat-menu-item (click)="onSortByCategorieClick()">
+        <mat-icon *ngIf="sortedItem == 5">check</mat-icon>
+        <span>Kategorie</span>
+      </button> -->
   </mat-menu>
 </div>
 
@@ -35,8 +37,17 @@
     <a><mat-icon>star</mat-icon></a>
     <mat-card-subtitle> 
       <p>
-        <span class="bold">Zeitraum:</span> {{ event['firstdate'] | date:'medium'}} 
-        - {{ event['lastdate'] | date:'medium'}}
+        <span class="bold">Nächste Veranstaltung:</span> 
+        <span *ngIf="event.getNextEventDate() as eventDate; else dateNotDefined"> 
+          <span *ngIf="this.isToday(eventDate.dFrom)"> Heute </span>
+          <span *ngIf="this.isTomorrow(eventDate.dFrom)"> Morgen </span>
+          <span *ngIf="!this.isTomorrow(eventDate.dFrom) && !this.isToday(eventDate.dFrom)"> {{ eventDate.dFrom | date:'dd MMM yyyy' }}</span>
+          von {{ eventDate.dFrom | date:'HH:mm'}} - {{ eventDate.dTo  | date:'HH:mm' }}
+        </span>
+        
+        <ng-template #dateNotDefined>
+            Keine Angaben
+        </ng-template>
       </p>
       <p>
         <span class="bold">Veranstalter: </span> 

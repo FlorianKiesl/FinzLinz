@@ -38,6 +38,10 @@ export class Event {
         return (startDate ? firstDateCopy >= startDate|| lastDateCopy >= startDate : true) && 
             (endDate ? firstDateCopy <= endDate: true)
     }
+
+    public getNextEventDate():EventOccurence{
+        return this.date.find((eventOccurence) => eventOccurence.dFrom.valueOf() >= Date.now())
+    }
 }
 
 @Injectable({
@@ -48,11 +52,11 @@ export class EventAdapter implements Adapter<Event>{
         var occurences = [];
         if (Array.isArray(item.date)) {
             for (let dateItem of item.date){
-                occurences.push(new EventOccurence(new Date(dateItem['@dFrom'] + '+01:00'), new Date(dateItem['@dTo'] + '+01:00')));
+                occurences.push(new EventOccurence(new Date(dateItem['@dFrom']), new Date(dateItem['@dTo'])));
             }
         }
         else {
-            occurences.push(new EventOccurence(new Date(item.date['@dFrom'] + '+01:00'), new Date(item.date['@dTo'] + '+01:00')));
+            occurences.push(new EventOccurence(new Date(item.date['@dFrom']), new Date(item.date['@dTo'])));
         }
 
         return new Event(
