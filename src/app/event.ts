@@ -9,6 +9,7 @@ export class Event {
     constructor(public id:number, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
          public categories: any, public organizer: EventOrganizer, public datumstring: string) {
+            this.date = this.getRepeatingOccurencesDates();
     }
 
     //ToDo: Carfule with timezones they are shown in the log with the central european timezone so one our less
@@ -40,7 +41,7 @@ export class Event {
     }
 
     public getNextEventDate():EventOccurence{
-        return this.date.find((eventOccurence) => eventOccurence.dFrom.valueOf() >= Date.now())
+        return this.date.find((eventOccurence) => eventOccurence.dTo.valueOf() >= Date.now())
     }
 }
 

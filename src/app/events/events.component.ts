@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
-import { format } from 'util';
 
 @Component({
   selector: 'app-events',
@@ -75,7 +74,6 @@ export class EventsComponent implements OnInit, OnChanges {
     if (changes["events"]) {
       this.onSortByNextEventClick();
     }
-    console.log(changes);
   }
 
   onSortByNameClick() {
@@ -103,5 +101,8 @@ export class EventsComponent implements OnInit, OnChanges {
   onSortByCategorieClick() {
     //this.events.sort((e1, e2) => e1.category.localeCompare(e2.organizer["#text"]))
     this.sortedItem = 5;
+  }
+
+  onShareClick() {
   }
 }
