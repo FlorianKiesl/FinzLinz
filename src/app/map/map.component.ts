@@ -7,6 +7,8 @@ import { __await } from 'tslib';
 import { async } from '@angular/core/testing';
 import { LeafletDirective } from '@asymmetrik/ngx-leaflet';
 import { Organizer } from '../organizer';
+import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-map',
@@ -36,7 +38,7 @@ export class MapComponent implements OnInit, OnChanges {
     center: latLng([ 48.30639, 14.28611 ])
   };
 
-  constructor(private locationService: LocationService) { }
+  constructor(private locationService: LocationService, public eventDetailsDialog:MatDialog) { }
 
   ngOnInit() {
     //console.log(L.map('map'));
@@ -80,8 +82,8 @@ export class MapComponent implements OnInit, OnChanges {
         let htmlStar = "<i class=\"material-icons\" style=\"font-size:12px;\">star</i>";
         let counter = 1;
         for (let event of eventsToLocation) {
-          let html_detail_btn = "<button mat-button color=\"primary\"><i class=\"material-icons\" style=\"font-size:12px;\">visibility</i></button>";
-          let html_event = "<div height=\"200px\"><p>" +
+          let html_detail_btn = "<button color=\"primary\" onClick=\"openEventDetails()\"><i class=\"material-icons\" style=\"font-size:12px;\">visibility</i></button>";
+          let html_event = html_detail_btn + "<div height=\"200px\"><p>" +
           "<a href=&quot;#&quot;>" + event.title + "</a>" + 
           "<br>" + event.datumstring + "</p></div>";
 
@@ -123,6 +125,15 @@ export class MapComponent implements OnInit, OnChanges {
 
   doDetails() {
       console.log("Hallo");
+  }
+
+  openEventDetails(){
+    console.log("Hallo");
+    const eventDetailDialogRef = this.eventDetailsDialog.open(EventdetailsComponent, {data: undefined});
+    eventDetailDialogRef.afterClosed().subscribe(result => {
+      console.log("Dialog closed: ${result}");
+    })
+    console.log(event);
   }
 
 }

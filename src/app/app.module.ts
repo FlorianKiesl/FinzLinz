@@ -14,6 +14,7 @@ import { EventsfilterComponent } from './eventsfilter/eventsfilter.component';
 import { registerLocaleData } from '@angular/common';
 import localeDEAT from '@angular/common/locales/de-AT';
 import localeDEATExtra from '@angular/common/locales/extra/de-AT';
+import { EventdetailsComponent } from './eventdetails/eventdetails.component';
 
 registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
 
@@ -22,7 +23,8 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     AppComponent,
     EventsComponent,
     MapComponent,
-    EventsfilterComponent
+    EventsfilterComponent,
+    EventdetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,10 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     LeafletModule.forRoot()
   ],
   providers: [{provide: LOCALE_ID, useValue: 'deAT'}],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    EventdetailsComponent
+  ]
 })
 export class AppModule { 
 }

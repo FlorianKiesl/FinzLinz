@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
+import {MatDialog} from '@angular/material';
+import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
 
 @Component({
   selector: 'app-events',
@@ -14,7 +16,7 @@ export class EventsComponent implements OnInit, OnChanges {
   sortItem: string = "Sortiert nach";
   sortedItem = 2;
 
-  constructor() { }
+  constructor(public eventDetailsDialog:MatDialog) { }
 
   getOrganizer(event:Event): Organizer {
     return (this.organizers && event.organizer ? 
@@ -24,6 +26,14 @@ export class EventsComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     // navigator.geolocation.getCurrentPosition(this.displayLocationInfo, this.handleLocationError, { maximumAge: 1500000, timeout: 0 })
+  }
+
+  openEventDetails(event:Event){
+    const eventDetailDialogRef = this.eventDetailsDialog.open(EventdetailsComponent, {data: event});
+    eventDetailDialogRef.afterClosed().subscribe(result => {
+      console.log("Dialog closed: ${result}");
+    })
+    console.log(event);
   }
 
   // displayLocationInfo(position) {
