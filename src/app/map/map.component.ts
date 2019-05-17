@@ -76,14 +76,27 @@ export class MapComponent implements OnInit, OnChanges {
           location.longitude = 14.28611;
         }
         let html = "<p><b>" + location.name + "</b></p>";
+        let htmlToolTip = html;
         let htmlStar = "<i class=\"material-icons\" style=\"font-size:12px;\">star</i>";
+        let counter = 1;
         for (let event of eventsToLocation) {
-          html = html + "<div height=\"200px\"><p>" +
-          "<a href=&quot;#&quot;>" + event.title + "</a>";
-          
-          //Added 03.05
-          html = html + "<br>" + event.datumstring;
-          //html = html + "<br>" + htmlStar + htmlStar + htmlStar + htmlStar + "</p></div>"
+          let html_detail_btn = "<button mat-button color=\"primary\"><i class=\"material-icons\" style=\"font-size:12px;\">visibility</i></button>";
+          let html_event = "<div height=\"200px\"><p>" +
+          "<a href=&quot;#&quot;>" + event.title + "</a>" + 
+          "<br>" + event.datumstring + "</p></div>";
+
+          html = html + html_event;
+          if (counter <= 3) {
+            htmlToolTip = html;
+          }
+          counter++;
+        }
+        if (counter > 3) {
+          htmlToolTip = htmlToolTip + "<div height=\"200px\"><p></p></div>"
+          htmlToolTip = htmlToolTip + (eventsToLocation.length - 3) + " weitere Veranstaltungen"
+        }
+        else {
+          htmlToolTip = html
         }
         let m = marker([ location.latitude, location.longitude ], 
           {icon: icon({
@@ -94,9 +107,10 @@ export class MapComponent implements OnInit, OnChanges {
           })
         })
         this.mapMarkers.push(m);
-        //Added Lukas 03.05. Set MaxHeight and scrollbar
+
         let popupoptions = {maxWidth: 300, minWidth: 250, maxHeight: 220, autoPan: true};
         m.bindPopup(html,popupoptions).openPopup().addTo(this.map);
+        m.bindTooltip(htmlToolTip);
       }
     }
     this.map.invalidateSize(); 
