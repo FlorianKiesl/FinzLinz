@@ -3,7 +3,7 @@ import { EventOrganizer } from './eventOrganizer';
 import { EventOccurence } from './eventOccurence';
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
-import { strictEqual } from 'assert';
+import { formatDate } from '@angular/common';
 
 export class Event {
     constructor(public id:number, public title: string, public description: string,
@@ -31,17 +31,66 @@ export class Event {
     }
 
     public isEventInTimeRange(startDate:Date, endDate:Date):boolean {
-        let firstDateCopy = new Date (new Date(this.firstdate).setHours(0, 0, 0, 0));
-        let lastDateCopy = new Date (new Date(this.lastdate).setHours(0, 0, 0, 0));
-        startDate ? startDate.setHours(0, 0, 0, 0) : false;
-        endDate ? endDate.setHours(0, 0, 0, 0): false;
-
-        return (startDate ? firstDateCopy >= startDate|| lastDateCopy >= startDate : true) && 
-            (endDate ? firstDateCopy <= endDate: true)
+        let eventOccurenceItem = this.getNextEventDateBetween(startDate, endDate);
+        return eventOccurenceItem ? true: false;
     }
 
     public getNextEventDate():EventOccurence{
         return this.date.find((eventOccurence) => eventOccurence.dTo.valueOf() >= Date.now())
+    }
+
+    public getNextEventDateBetween(dateFrom: Date, dateTo: Date):EventOccurence {
+        let eDate;
+        let sDate;
+        
+        if (!dateFrom && !dateTo) {
+            return this.date[0];
+        }
+
+        else if (dateFrom && !dateTo) {
+            sDate = new Date (new Date(dateFrom).setHours(0, 0, 0, 0));
+            eDate = new Date (new Date(dateFrom).setHours(24, 0, 0, 0));
+        }
+        else if (!dateFrom && dateTo) {
+            sDate = new Date (new Date(dateTo).setHours(0, 0, 0, 0));
+            eDate = new Date (new Date(dateTo).setHours(24, 0, 0, 0));
+        }
+        else {
+            sDate = new Date (new Date(dateFrom).setHours(0, 0, 0, 0));
+            eDate = new Date (new Date(dateTo).setHours(24, 0, 0, 0));
+        }
+        
+        return this.date.find(
+            (eventOccurrence) => 
+            (eventOccurrence.dTo.valueOf() >= sDate.valueOf()) && (eventOccurrence.dTo.valueOf() <= eDate.valueOf()));
+    }
+
+    public getNextEventDateBetweenString(dateFrom: Date, dateTo: Date){
+        let eventOccurence = this.getNextEventDateBetween(dateFrom, dateTo);
+        if (!eventOccurence) {
+          return 'keine Veranstaltung in ausgewählten Zeitraum gefunden';
+        }
+        let dateString = '';
+        if (this.isToday(eventOccurence.dFrom)) {
+          dateString = 'Heute'
+        }
+        else if (this.isTomorrow(eventOccurence.dFrom)) {
+          dateString = 'Tomorrow'
+        }
+        else {
+          dateString = formatDate(eventOccurence.dFrom, 'dd MMM yyyy', 'en');
+        }
+        return dateString + ' von '   + formatDate(eventOccurence.dFrom, 'HH:mm', 'en') + ' - '+ formatDate(eventOccurence.dTo, 'HH:mm', 'en');
+    }
+
+    private isToday(date: Date): Boolean {
+        var today = new Date();
+        return (new Date(date)).setHours(0,0,0,0) == today.setHours(0, 0, 0, 0)
+    }
+    
+    private isTomorrow(date: Date): Boolean {
+        var today = new Date();
+        return (new Date(date)).setHours(0,0,0,0) == new Date(today.setDate(today.getDate() + 1)).setHours(0, 0, 0, 0)
     }
 }
 

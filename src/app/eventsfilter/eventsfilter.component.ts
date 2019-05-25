@@ -16,7 +16,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   @Input() organizers: Organizer[];
   @Input() events: Event[];
   @Input() categories: Category[];
-  @Output() filterChanged = new EventEmitter<Event[]>();
+  @Output() filterChanged = new EventEmitter<Map<String, any>>();
 
   organizerFormControl = new FormControl();
   organizerOptions: Observable<Organizer[]>;
@@ -42,7 +42,11 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   private onFilter() {
     let filteredEvents = this.filterEventsByTitle(this.filteredEventOptions.copyWithin(-1, -1), this.eventFormControl.value)
-    this.filterChanged.emit(filteredEvents);
+    let filterMap = new Map<String, any>();
+    filterMap.set('filteredEvents', filteredEvents);
+    filterMap.set('dateStart', this.dateStart.value);
+    filterMap.set('dateEnd', this.dateEnd.value)
+    this.filterChanged.emit(filterMap);
   }
 
   private onReset() {

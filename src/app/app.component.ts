@@ -6,6 +6,7 @@ import { Organizer } from './organizer';
 import { OrganizerService } from './organizer.service';
 import { Category } from './category';
 import { CategoryService } from './category.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -16,19 +17,27 @@ export class AppComponent implements OnInit {
   title = 'FinzInLinzApp';
   events: Event[];
   organizers: Organizer[];
-  filteredEvents: Event[];
+  filter: Map<String, any>;
   categories: Category[];
 
   constructor(
     private eventService: EventService, 
     private organizerService: OrganizerService, 
     private categoryService: CategoryService) {
+      this.filter = new Map<String, any>();
   }
 
   setEvents(): void {
     this.eventService.getEvents().subscribe(eventsParam => {
       this.events = eventsParam.sort( (a, b) => a.title.localeCompare(b.title) );
-      this.filteredEvents = this.events;
+      this.onFilterChanged(
+        new Map<String, any>().set(
+            'filteredEvents', this.events
+          ).set(
+            'dateStart', undefined
+          ).set(
+            'dateEnd', undefined)
+        );
     });
   }
 
@@ -50,8 +59,8 @@ export class AppComponent implements OnInit {
     this.setCategories();
   }
 
-  onFilterChanged(events: Event[]){
-      this.filteredEvents = events;
+  onFilterChanged(filterMap: Map<String, any>){
+    this.filter = filterMap;
   }
 
   onTabChange(event: MatTabChangeEvent){

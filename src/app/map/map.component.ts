@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { latLng, tileLayer, Map, marker, icon, Marker, TileLayer, Layer, Handler } from 'leaflet';
+import { latLng, tileLayer, Map as LeafletMap, marker, icon, Marker, TileLayer, Layer, Handler } from 'leaflet';
 import { Event } from '../event'
 import { LocationService } from '../location.service';
 import { Location } from '../location';
@@ -16,10 +16,11 @@ import { MatDialog } from '@angular/material';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, OnChanges {
-  @Input() events: Event[];
+  @Input() filter: Map<String, any>
   @Input() organizer: Organizer[];
   
-  map: Map;
+  events: Event[] = [];
+  map: LeafletMap;
   locations: Location[];
   mapMarkers: Marker<any>[] = [];
   
@@ -45,6 +46,9 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['filter']){
+      this.events = this.filter.get('filteredEvents');
+    }
     if (this.map) {
       for(var i = 0; i < this.mapMarkers.length; i++){
         this.map.removeLayer(this.mapMarkers[i]);
@@ -61,11 +65,11 @@ export class MapComponent implements OnInit, OnChanges {
     return this.events.filter(item => item.location ? item.location.id == location_id : undefined)
   }
 
-  async onMapReady(map: Map) {
+  async onMapReady(map: LeafletMap) {
     this.redraw(map);
   }
 
-  async redraw(map: Map) {
+  async redraw(map: LeafletMap) {
     this.map = map;
     this.locations= await this.getLocations();
     for (let location of this.locations) {
@@ -85,7 +89,7 @@ export class MapComponent implements OnInit, OnChanges {
           let html_detail_btn = "<button color=\"primary\" onClick=\"openEventDetails()\"><i class=\"material-icons\" style=\"font-size:12px;\">visibility</i></button>";
           let html_event = html_detail_btn + "<div height=\"200px\"><p>" +
           "<a href=&quot;#&quot;>" + event.title + "</a>" + 
-          "<br>" + event.datumstring + "</p></div>";
+          "<br>Nächste Veranstaltung: " + event.getNextEventDateBetweenString(this.filter.get('dateStart'), this.filter.get('dateEnd')) + "</p></div>";
 
           html = html + html_event;
           if (counter <= 3) {

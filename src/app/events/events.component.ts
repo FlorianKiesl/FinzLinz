@@ -3,6 +3,8 @@ import { Event } from '../event';
 import { Organizer } from '../organizer';
 import {MatDialog} from '@angular/material';
 import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
+import { EventOccurence } from '../eventOccurence';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-events',
@@ -10,11 +12,12 @@ import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit, OnChanges {
-  @Input() events: Event[] 
+  @Input() filter: Map<String, any>;
   @Input() organizers: Organizer[];
 
   sortItem: string = "Sortiert nach";
   sortedItem = 2;
+  events: Event[] = [];
 
   constructor(public eventDetailsDialog:MatDialog) { }
 
@@ -62,27 +65,13 @@ export class EventsComponent implements OnInit, OnChanges {
   //     // ...
   //   }
   // }
-
-  getDateFormatString(date: Date): String {
-    var today = new Date();
-    return (new Date(date)).setHours(0,0,0,0) == today.setHours(0, 0, 0, 0) ? "Heute" : 
-    (new Date(date)).setHours(0,0,0,0) == new Date(today.setDate(today.getDate() + 1)).setHours(0, 0, 0, 0) ? "Morgen" : 
-    undefined;
-  }
-
-  isToday(date: Date): Boolean {
-    var today = new Date();
-    return (new Date(date)).setHours(0,0,0,0) == today.setHours(0, 0, 0, 0)
-  }
-
-  isTomorrow(date: Date): Boolean {
-    var today = new Date();
-    return (new Date(date)).setHours(0,0,0,0) == new Date(today.setDate(today.getDate() + 1)).setHours(0, 0, 0, 0)
-  }
   
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["events"]) {
-      this.onSortByNextEventClick();
+    if (changes["filter"]) {
+      this.events = this.filter.get("filteredEvents");
+      if (this.events) {
+        this.onSortByNextEventClick();
+      }
     }
   }
 
@@ -93,8 +82,21 @@ export class EventsComponent implements OnInit, OnChanges {
 
   onSortByNextEventClick() {
     this.events.sort(
-      (e1, e2) => 
-      e1.getNextEventDate() && e2.getNextEventDate() ? e1.getNextEventDate().dFrom.valueOf() - e2.getNextEventDate().dFrom.valueOf() : e1.getNextEventDate() ? 1 : -1)
+      function(e1, e2)  {
+        let e1Date = e1.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
+        let e2Date = e2.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
+
+        if (e1Date && e2Date) {
+          return e1Date.dFrom.valueOf() - e2Date.dFrom.valueOf();
+        }
+        else if (e1Date && !e2Date) {
+          return 1
+        }
+        else {
+          return -1
+        }
+      }.bind(this)
+    )
     this.sortedItem = 2;
   }
 
@@ -114,5 +116,9 @@ export class EventsComponent implements OnInit, OnChanges {
   }
 
   onShareClick() {
+  }
+
+  getNextEventDateString(event: Event): String {
+    return event.getNextEventDateBetweenString(this.filter.get('dateStart'), this.filter.get('dateEnd'));
   }
 }
