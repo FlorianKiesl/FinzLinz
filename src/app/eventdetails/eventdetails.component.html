@@ -1,3 +1,9 @@
-<p>
-  {{data.title}}
-</p>
+<div>
+  <h1>{{data.title}}</h1>
+  <p [innerHTML]="data.description"></p>
+</div>
+<mat-grid-list cols="1" rowHeight="4:1">
+  <mat-grid-tile><p [innerHTML]="data.description"></p></mat-grid-tile>
+</mat-grid-list>
+
+  

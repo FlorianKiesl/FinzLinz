@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material';
 import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
 import { EventOccurence } from '../eventOccurence';
 import { formatDate } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-events',
@@ -19,7 +20,9 @@ export class EventsComponent implements OnInit, OnChanges {
   sortedItem = 2;
   events: Event[] = [];
 
-  constructor(public eventDetailsDialog:MatDialog) { }
+  constructor(private sanitizer:DomSanitizer, public eventDetailsDialog:MatDialog) {
+    
+   }
 
   getOrganizer(event:Event): Organizer {
     return (this.organizers && event.organizer ? 

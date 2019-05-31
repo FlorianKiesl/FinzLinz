@@ -65,7 +65,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    {{ event.description | slice:0:800 }} ...
+    <span [innerHTML]="event.description | slice:0:800"></span> ...
   </mat-card-content>
   <mat-card-actions class="action-buttons">
       <button mat-button color="primary"><mat-icon>comment</mat-icon> Comments</button>

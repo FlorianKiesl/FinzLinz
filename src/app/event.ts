@@ -4,6 +4,7 @@ import { EventOccurence } from './eventOccurence';
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
 import { formatDate } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export class Event {
     constructor(public id:number, public title: string, public description: string,
