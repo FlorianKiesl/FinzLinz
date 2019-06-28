@@ -141,3 +141,9 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
 }
+
+/*
+Source:
+https://github.com/Asymmetrik/ngx-leaflet
+https://asymmetrik.com/ngx-leaflet-tutorial-angular-cli/
+*/

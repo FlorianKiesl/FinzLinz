@@ -8,9 +8,21 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 })
 export class EventdetailsComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Event) { }
+  rating:number = -1;
+
+  constructor(
+    public dialogRef: MatDialogRef<EventdetailsComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: Event) { }
 
   ngOnInit() {
   }
 
+  onHomeClick(): void {
+    this.dialogRef.close();
+  }
+
+  setRating(star:number){
+    this.rating = star == this.rating ? -1 : star;
+    console.log(this.rating)
+  }
 }

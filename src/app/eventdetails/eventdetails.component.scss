@@ -1,3 +1,31 @@
 mat-grid-tile {
     background: lightblue;
 }
+
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.example-icon {
+padding: 0 14px;
+}
+
+.rating-container button,
+.rating-container a {
+  margin-right: 0px;
+}
+
+.comment-form {
+  min-width: 150px;
+  
+  width: 100%;
+}
+
+.comment-user {
+  min-width: 150px;
+  max-width: 500px;
+}
+
+.comment-input {
+  width: 100%;
+}

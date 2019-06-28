@@ -3,7 +3,7 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCardModule, MatTabsModule, MatMenuModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatAutocomplete, MatOption, MatAutocompleteModule, MatOptionModule, DateAdapter, MatGridList, MatGridListModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatTabsModule, MatMenuModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatAutocomplete, MatOption, MatAutocompleteModule, MatOptionModule, MatDividerModule, MatGridList, MatGridListModule, MatDialogModule } from '@angular/material';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -47,8 +47,10 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     MatAutocompleteModule,
     MatOptionModule,
     MatInputModule,
+    MatDialogModule,
     ReactiveFormsModule,
     MatSelectModule,
+    MatDividerModule,
     LeafletModule.forRoot()
   ],
   providers: [{provide: LOCALE_ID, useValue: 'deAT'}],
