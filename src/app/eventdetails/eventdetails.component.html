@@ -1,9 +1,58 @@
-<div>
-  <h1>{{data.title}}</h1>
+<mat-dialog-content>
+  <h1 mat-dialog-title [innerHTML]>{{data.title}}</h1>
+  <a><mat-icon>star</mat-icon></a>
+  <a><mat-icon>star</mat-icon></a>
+  <a><mat-icon>star</mat-icon></a>
+  <a><mat-icon>star</mat-icon></a>
+  <a><mat-icon>star_border</mat-icon></a>
   <p [innerHTML]="data.description"></p>
-</div>
-<mat-grid-list cols="1" rowHeight="4:1">
-  <mat-grid-tile><p [innerHTML]="data.description"></p></mat-grid-tile>
-</mat-grid-list>
-
-  
+  <mat-divider></mat-divider>
+  <div class="personal_comment_container">
+    <h2>Deine Bewertung</h2>
+    <form class="comment-form">
+      <mat-form-field class="comment-user">
+        <input matInput placeholder="User" value="Guest User">
+      </mat-form-field>
+      <div class="rating-container">
+          <button mat-icon-button (click)="setRating(1)">
+            <mat-icon *ngIf="rating > 0; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(2)">
+            <mat-icon *ngIf="rating > 1; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon [inline]="true">star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(3)">
+            <mat-icon *ngIf="rating > 2; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(4)">
+            <mat-icon *ngIf="rating > 3; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(5)">
+            <mat-icon *ngIf="rating > 4; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+        </div>
+      <mat-form-field class="comment-input">
+        <textarea matInput placeholder="Kommentiere das Event"></textarea>
+      </mat-form-field>
+      <button mat-button color="primary">Senden</button>
+    </form>  
+  </div>
+  <mat-divider></mat-divider>
+  <div class="comments-container">
+    <h2>Kommentare</h2>
+    <div class="comment-container">
+        <h3>Guest User</h3> 
+        <a><mat-icon>star</mat-icon></a>
+        <a><mat-icon>star</mat-icon></a>
+        <a><mat-icon>star</mat-icon></a>
+        <a><mat-icon>star</mat-icon></a>
+        <a><mat-icon>star_border</mat-icon></a>
+        <p>Tolle Veranstaltung</p>
+        <mat-divider></mat-divider>
+    </div>
+  </div>
+</mat-dialog-content>

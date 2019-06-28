@@ -116,6 +116,7 @@ export class MapComponent implements OnInit, OnChanges {
 
         let popupoptions = {maxWidth: 300, minWidth: 250, maxHeight: 220, autoPan: true};
         m.bindPopup(html,popupoptions).openPopup().addTo(this.map);
+        //this.layer.bindPopup(html, popupoptions).openPopup().addTo(this.map)
         m.bindTooltip(htmlToolTip);
       }
     }
@@ -141,3 +142,9 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
 }
+
+/*
+Source:
+https://github.com/Asymmetrik/ngx-leaflet
+https://asymmetrik.com/ngx-leaflet-tutorial-angular-cli/
+*/

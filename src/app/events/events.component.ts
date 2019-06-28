@@ -20,7 +20,7 @@ export class EventsComponent implements OnInit, OnChanges {
   sortedItem = 2;
   events: Event[] = [];
 
-  constructor(private sanitizer:DomSanitizer, public eventDetailsDialog:MatDialog) {
+  constructor(public eventDetailsDialog:MatDialog) {
     
    }
 
@@ -35,7 +35,9 @@ export class EventsComponent implements OnInit, OnChanges {
   }
 
   openEventDetails(event:Event){
-    const eventDetailDialogRef = this.eventDetailsDialog.open(EventdetailsComponent, {data: event});
+    const eventDetailDialogRef = this.eventDetailsDialog.open(
+      EventdetailsComponent, {data: event}
+    );
     eventDetailDialogRef.afterClosed().subscribe(result => {
       console.log("Dialog closed: ${result}");
     })
