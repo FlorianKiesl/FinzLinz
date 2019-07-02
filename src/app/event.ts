@@ -76,7 +76,7 @@ export class Event {
           dateString = 'Heute'
         }
         else if (this.isTomorrow(eventOccurence.dFrom)) {
-          dateString = 'Tomorrow'
+          dateString = 'Morgen'
         }
         else {
           dateString = formatDate(eventOccurence.dFrom, 'dd MMM yyyy', 'en');
