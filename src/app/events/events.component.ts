@@ -6,6 +6,7 @@ import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
 import { EventOccurence } from '../eventOccurence';
 import { formatDate } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-events',
@@ -125,5 +126,32 @@ export class EventsComponent implements OnInit, OnChanges {
 
   getNextEventDateString(event: Event): String {
     return event.getNextEventDateBetweenString(this.filter.get('dateStart'), this.filter.get('dateEnd'));
+  }
+
+  createEventICSFile(event:Event){
+    console.log('HALLLLLOOOOO')
+    var content = 
+      'BEGIN:VCALENDAR'+ '\n' +
+      'PRODID:Calendar'+ '\n' +
+      'VERSION:2.0'+ '\n' +
+      'BEGIN:VEVENT'+ '\n' +
+      'UID:0@default'+ '\n' +
+      'CLASS:PUBLIC'+ '\n' +
+      'DESCRIPTION:' + event.title + '\n' +
+      //DTSTAMP;VALUE=DATE-TIME:20190527T195353
+      'DTSTART;VALUE=DATE-TIME:'+ formatDate(event.getNextEventDate().dFrom, 'yyyyMMddThhmmss', 'en') + '\n' +
+      'DTEND;VALUE=DATE-TIME:'+ formatDate(event.getNextEventDate().dTo, 'yyyyMMddThhmmss', 'en') + '\n' +
+      //how to get organizername? 
+      'LOCATION:' + event.organizer +  '\n' +
+      'TRANSP:TRANSPARENT' + '\n' +
+      'END:VEVENT' + '\n' +
+      'END:VCALENDAR'
+    var filename = 'export.ics'
+
+    var blob = new Blob([content], {
+     type: "text/plain;charset=utf-8"
+    });
+    
+    saveAs(blob, filename);
   }
 }
