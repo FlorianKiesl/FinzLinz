@@ -129,18 +129,18 @@ export class EventsComponent implements OnInit, OnChanges {
   }
 
   createEventICSFile(event:Event){
-    console.log('HALLLLLOOOOO')
+    let event_date = event.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
     var content = 
-      'BEGIN:VCALENDAR'+ '\n' +
+      'BEGIN:VCALENDAR'+ '\r\n' +
       'PRODID:Calendar'+ '\n' +
       'VERSION:2.0'+ '\n' +
       'BEGIN:VEVENT'+ '\n' +
       'UID:0@default'+ '\n' +
       'CLASS:PUBLIC'+ '\n' +
       'DESCRIPTION:' + event.title + '\n' +
-      //DTSTAMP;VALUE=DATE-TIME:20190527T195353
-      'DTSTART;VALUE=DATE-TIME:'+ formatDate(event.getNextEventDate().dFrom, 'yyyyMMddThhmmss', 'en') + '\n' +
-      'DTEND;VALUE=DATE-TIME:'+ formatDate(event.getNextEventDate().dTo, 'yyyyMMddThhmmss', 'en') + '\n' +
+      'DTSTAMP;VALUE=DATE-TIME:' + formatDate(new Date(Date.now()),  'yyyyMMddTHHmmss', 'deAT') + '\n' +
+      'DTSTART;VALUE=DATE-TIME:'+ formatDate(event_date.dFrom, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
+      'DTEND;VALUE=DATE-TIME:'+ formatDate(event_date.dTo, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
       //how to get organizername? 
       'LOCATION:' + event.organizer +  '\n' +
       'TRANSP:TRANSPARENT' + '\n' +

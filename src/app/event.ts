@@ -37,7 +37,9 @@ export class Event {
     }
 
     public getNextEventDate():EventOccurence{
-        return this.date.find((eventOccurence) => eventOccurence.dTo.valueOf() >= Date.now())
+        console.log(this)
+        //return this.date.find((eventOccurence) => eventOccurence.dTo.valueOf() >= Date.now())
+        return this.getNextEventDateBetween(new Date(Date.now()), undefined)
     }
 
     public getNextEventDateBetween(dateFrom: Date, dateTo: Date):EventOccurence {
@@ -79,9 +81,9 @@ export class Event {
           dateString = 'Morgen'
         }
         else {
-          dateString = formatDate(eventOccurence.dFrom, 'dd MMM yyyy', 'en');
+          dateString = formatDate(eventOccurence.dFrom, 'dd MMM yyyy', 'deAT');
         }
-        return dateString + ' von '   + formatDate(eventOccurence.dFrom, 'HH:mm', 'en') + ' - '+ formatDate(eventOccurence.dTo, 'HH:mm', 'en');
+        return dateString + ' von '   + formatDate(eventOccurence.dFrom, 'HH:mm', 'deAT') + ' - '+ formatDate(eventOccurence.dTo, 'HH:mm', 'deAT');
     }
 
     private isToday(date: Date): Boolean {

@@ -53,7 +53,7 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     MatDividerModule,
     LeafletModule.forRoot()
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'deAT'}],
+  //providers: [{provide: LOCALE_ID, useValue: 'deAT'}], ToDo: causes invalid language tag: deAT error => investigate why
   bootstrap: [AppComponent],
   entryComponents: [
     EventdetailsComponent
