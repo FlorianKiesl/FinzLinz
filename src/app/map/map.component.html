@@ -2,6 +2,38 @@
   <div class="map"
       leaflet
       (leafletMapReady)="onMapReady($event)"
-      [leafletOptions]="options">
+      [leafletOptions]="options"
+      [ngStyle]="{'height.%': 100 - detailsHeight}">
+  </div>
+
+  <div class="events" [hidden]="!selectedEvents" [ngStyle]="{'height.%': detailsHeight}">
+    <!-- <mat-card class="event-card" *ngFor="let event of selectedEvents">
+      <mat-card-header>
+        <mat-card-title> {{ event.title }} </mat-card-title>
+        <mat-card-subtitle>
+          <a><mat-icon>star</mat-icon></a>
+          <a><mat-icon>star</mat-icon></a>
+          <a><mat-icon>star</mat-icon></a>
+          <a><mat-icon>star</mat-icon></a>
+          <a><mat-icon>star_border</mat-icon></a>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions class="action-buttons">
+        <button mat-button color="primary" (click)="openEventDetails(event)"><mat-icon>visibility</mat-icon> Details</button>
+    </mat-card-actions>
+    </mat-card> -->
+
+    <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="openEventDetails(event)">
+      <div>{{ event.title }}</div>
+      <div>
+        <mat-icon>star</mat-icon>
+        <mat-icon>star</mat-icon>
+        <mat-icon>star</mat-icon>
+        <mat-icon>star</mat-icon>
+        <mat-icon>star_border</mat-icon>
+      </div>
+    </button>
+
   </div>
 </div>
+

@@ -1,14 +1,10 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { latLng, tileLayer, Map as LeafletMap, marker, icon, Marker, TileLayer, Layer, Handler } from 'leaflet';
-import { Event } from '../event'
-import { LocationService } from '../location.service';
-import { Location } from '../location';
-import { __await } from 'tslib';
-import { async } from '@angular/core/testing';
-import { LeafletDirective } from '@asymmetrik/ngx-leaflet';
-import { Organizer } from '../organizer';
-import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { icon, latLng, Layer, Map as LeafletMap, marker, Marker, tileLayer, LatLngExpression, MarkerOptions, Icon } from 'leaflet';
+import { Event } from '../event';
+import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
+import { Location } from '../location';
+import { LocationService } from '../location.service';
 
 @Component({
   selector: 'app-map',
@@ -17,16 +13,26 @@ import { MatDialog } from '@angular/material';
 })
 export class MapComponent implements OnInit, OnChanges {
   @Input() filter: Map<String, any>
-  @Input() organizer: Organizer[];
   
   events: Event[] = [];
+  selectedEvents: Event[] = [];
+  detailsHeight: Number = 0;
   map: LeafletMap;
   locations: Location[];
   mapMarkers: Marker<any>[] = [];
+  selectedMarker: Marker;
   
   layer: Layer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   });
+
+
+  defaultIcon: Icon = icon({
+    iconSize: [ 25, 41 ],
+    iconAnchor: [ 13, 41 ],
+    iconUrl: 'leaflet/marker-icon.png',
+    shadowUrl: 'leaflet/marker-shadow.png'
+  })
 
   layers: any[] = [
     this.layer
@@ -39,10 +45,16 @@ export class MapComponent implements OnInit, OnChanges {
     center: latLng([ 48.30639, 14.28611 ])
   };
 
-  constructor(private locationService: LocationService, public eventDetailsDialog:MatDialog) { }
+  constructor(private locationService: LocationService, public eventDetailsDialog:MatDialog, private zone: NgZone) { }
 
   ngOnInit() {
     //console.log(L.map('map'));
+    if (this.map) {
+      for(var i = 0; i < this.mapMarkers.length; i++){
+        this.map.removeLayer(this.mapMarkers[i]);
+      }
+      this.redraw(this.map)
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -71,7 +83,28 @@ export class MapComponent implements OnInit, OnChanges {
 
   async redraw(map: LeafletMap) {
     this.map = map;
-    this.locations= await this.getLocations();
+    this.map.on("click", function(e) {
+      this.changeIcons();
+      this.detailsHeight = 0;
+      this.zone.run(() => {
+        this.selectedEvents = [];
+      })
+      
+    }.bind(this));
+
+    this.locations = await this.getLocations();
+    this.addMarkers();
+
+    //ToDo: Here the Markers needs to be deleted and added again, otherwise when setIcon is called when clicking on the marker the Previous icon still stays, but i do not know why the hell this happens.
+    //Only when page has loaded and no filter action was triggered this happens.
+    for(var i = 0; i < this.mapMarkers.length; i++){
+      this.map.removeLayer(this.mapMarkers[i]);
+    }
+    this.addMarkers();
+    //this.map.invalidateSize(); 
+  }
+
+  private addMarkers() {
     for (let location of this.locations) {
       var eventsToLocation = this.getEventsToLocation(location["id"]);
       if (eventsToLocation.length > 0){
@@ -83,19 +116,18 @@ export class MapComponent implements OnInit, OnChanges {
         }
         let html = "<p><b>" + location.name + "</b></p>";
         let htmlToolTip = html;
-        let htmlStar = "<i class=\"material-icons\" style=\"font-size:12px;\">star</i>";
-        let counter = 1;
+        let counter = 0;
         for (let event of eventsToLocation) {
-          let html_detail_btn = "<button color=\"primary\" onClick=\"openEventDetails()\"><i class=\"material-icons\" style=\"font-size:12px;\">visibility</i></button>";
-          let html_event = html_detail_btn + "<div height=\"200px\"><p>" +
+          let html_event = "<div height=\"200px\"><p>" +
           "<a href=&quot;#&quot;>" + event.title + "</a>" + 
           "<br>Nächste Veranstaltung: " + event.getNextEventDateBetweenString(this.filter.get('dateStart'), this.filter.get('dateEnd')) + "</p></div>";
 
           html = html + html_event;
+          counter++;
           if (counter <= 3) {
             htmlToolTip = html;
           }
-          counter++;
+          
         }
         if (counter > 3) {
           htmlToolTip = htmlToolTip + "<div height=\"200px\"><p></p></div>"
@@ -104,25 +136,28 @@ export class MapComponent implements OnInit, OnChanges {
         else {
           htmlToolTip = html
         }
-        let m = marker([ location.latitude, location.longitude ], 
-          {icon: icon({
-            iconSize: [ 25, 41 ],
-            iconAnchor: [ 13, 41 ],
-            iconUrl: 'leaflet/marker-icon.png',
-            shadowUrl: 'leaflet/marker-shadow.png'
-          })
-        })
+
+        let m = new EventMarker([ location.latitude, location.longitude ], {},
+          location.id
+        );
+        
+        m.setIcon(this.defaultIcon);
+
+        m.on('click', this.click.bind(this))
         this.mapMarkers.push(m);
 
-        let popupoptions = {maxWidth: 300, minWidth: 250, maxHeight: 220, autoPan: true};
-        m.bindPopup(html,popupoptions).openPopup().addTo(this.map);
-        //this.layer.bindPopup(html, popupoptions).openPopup().addTo(this.map)
-        m.bindTooltip(htmlToolTip);
+        m.bindTooltip(htmlToolTip).addTo(this.map);
+
       }
     }
-    this.map.invalidateSize(); 
-    
   }
+
+  changeIcons(){
+    this.mapMarkers.forEach(element => {
+      element.setIcon(this.defaultIcon)
+    });
+  }
+
 
   refresh() {
     this.map.invalidateSize(); 
@@ -132,16 +167,56 @@ export class MapComponent implements OnInit, OnChanges {
       console.log("Hallo");
   }
 
-  openEventDetails(){
-    console.log("Hallo");
-    const eventDetailDialogRef = this.eventDetailsDialog.open(EventdetailsComponent, {data: undefined});
+  click(e) {
+    if (this.selectedMarker) {
+      this.selectedMarker.setIcon(icon({
+        iconSize: [ 25, 41 ],
+        iconAnchor: [ 13, 41 ],
+        iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-orange.png',
+        shadowUrl: 'leaflet/marker-shadow.png'
+      }));
+    }
+
+    this.selectedMarker = e.target;
+    this.detailsHeight = 30;
+		this.zone.run(() => {
+      this.map.setView(this.selectedMarker.getLatLng(), 14);
+      var myIcon = icon({
+        iconSize: [ 25, 41 ],
+        iconAnchor: [ 13, 41 ],
+        iconUrl: 'https://gkv.com/wp-content/uploads/leaflet-maps-marker-icons/map_marker-red.png',
+        shadowUrl: 'leaflet/marker-shadow.png'
+      });
+      e.target.setIcon(myIcon);
+
+      this.selectedEvents = this.getEventsToLocation(e.target.locationID);
+      //this.openEventDetails(this.selectedEvents[0]);
+    });
+    
+    
+    //this.changeDetector.detectChanges();
+    console.log(this.selectedEvents)
+  }
+  
+  openEventDetails(event:Event){
+    const eventDetailDialogRef = this.eventDetailsDialog.open(
+      EventdetailsComponent, {data: event}
+    );
     eventDetailDialogRef.afterClosed().subscribe(result => {
       console.log("Dialog closed: ${result}");
     })
     console.log(event);
   }
-
 }
+
+export class EventMarker extends Marker{
+  locationID: number;
+  constructor(latlng: LatLngExpression, options?: MarkerOptions, locationID?: number){
+    super(latlng, options);
+    this.locationID = locationID;
+  }
+}
+
 
 /*
 Source:
@@ -149,4 +224,7 @@ https://github.com/Asymmetrik/ngx-leaflet
 https://asymmetrik.com/ngx-leaflet-tutorial-angular-cli/
 https://github.com/Asymmetrik/ngx-leaflet/issues/178
 https://github.com/Asymmetrik/ngx-leaflet/issues/60
+
+Check this for custom sidebar
+https://leafletjs.com/examples/extending/extending-3-controls.html
 */

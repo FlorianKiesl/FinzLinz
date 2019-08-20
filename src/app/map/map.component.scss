@@ -1,17 +1,62 @@
 .flex-container{
-    display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-    display: -ms-flexbox;  /* TWEENER - IE 10 */
-    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-    display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
-    
-    justify-content: center;
-    align-items: center;
-    
-    width: 100%;
-    padding: 5px;
-  }
+  display: inline-block;  
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
+  //padding: 5px;
+}
 
-  .map{
-    width: 100%;
-    height: 500px;
-  }
+.flex-container > .map{
+  display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+  
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 70%;
+}
+
+.flex-container > .events{
+  display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: left;
+  justify-content: left;
+  height: 30%;
+  min-width: 0;
+}
+
+.event-card{
+  width: 200px;
+  min-width: 200px;
+  background-color: white;
+}
+
+.mat-icon {
+  height: 12px;
+  width: 12px;
+}
+
+.material-icons {
+  font-size: 12px;
+}
+
+
+.event-card {
+  cursor: pointer;
+  text-align: left;
+  margin: 4px 2px 4px 2px;
+
+  width: 200px;
+}
+
+.mat-raised-button {
+  line-height: auto;
+}

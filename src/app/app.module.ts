@@ -3,7 +3,12 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCardModule, MatTabsModule, MatMenuModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatAutocomplete, MatOption, MatAutocompleteModule, MatOptionModule, MatDividerModule, MatGridList, MatGridListModule, MatDialogModule } from '@angular/material';
+import { 
+  MatButtonModule, MatCardModule, MatTabsModule, MatMenuModule, MatToolbarModule, 
+  MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatFormFieldModule, 
+  MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatAutocompleteModule, 
+  MatOptionModule, MatDividerModule, MatGridListModule, MatDialogModule, MatRippleModule 
+} from '@angular/material';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -51,6 +56,7 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     ReactiveFormsModule,
     MatSelectModule,
     MatDividerModule,
+    MatRippleModule,
     LeafletModule.forRoot()
   ],
   //providers: [{provide: LOCALE_ID, useValue: 'deAT'}], ToDo: causes invalid language tag: deAT error => investigate why
