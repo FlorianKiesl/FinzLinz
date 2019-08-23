@@ -7,6 +7,7 @@ import { formatDate } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 
 export class Event {
+    
     constructor(public id:number, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
          public categories: any, public organizer: EventOrganizer, public datumstring: string) {

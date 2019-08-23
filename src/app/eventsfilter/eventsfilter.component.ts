@@ -40,7 +40,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
   }
 
-  private onFilter() {
+  public onFilter() {
     let filteredEvents = this.filterEventsByTitle(this.filteredEventOptions.copyWithin(-1, -1), this.eventFormControl.value)
     let filterMap = new Map<String, any>();
     filterMap.set('filteredEvents', filteredEvents);
@@ -49,7 +49,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     this.filterChanged.emit(filterMap);
   }
 
-  private onReset() {
+  public onReset() {
     this.eventFormControl.setValue('');
     this.organizerFormControl.setValue('');
     this.clearCategories(undefined);

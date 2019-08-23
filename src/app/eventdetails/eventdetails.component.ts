@@ -10,9 +10,13 @@ export class EventdetailsComponent implements OnInit {
 
   rating:number = -1;
 
+  event: Event;
+
   constructor(
     public dialogRef: MatDialogRef<EventdetailsComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: Event) { }
+    @Inject(MAT_DIALOG_DATA) public data: Event) {
+      this.event = data;
+    }
 
   ngOnInit() {
   }

@@ -1,11 +1,11 @@
 <mat-dialog-content>
-  <h1 mat-dialog-title [innerHTML]>{{data.title}}</h1>
+  <h1 mat-dialog-title [innerHTML]>{{event?.title}}</h1>
   <a><mat-icon>star</mat-icon></a>
   <a><mat-icon>star</mat-icon></a>
   <a><mat-icon>star</mat-icon></a>
   <a><mat-icon>star</mat-icon></a>
   <a><mat-icon>star_border</mat-icon></a>
-  <p [innerHTML]="data.description"></p>
+  <p [innerHTML]="event?.description"></p>
   <mat-divider></mat-divider>
   <div class="personal_comment_container">
     <h2>Deine Bewertung</h2>

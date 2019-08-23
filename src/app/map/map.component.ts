@@ -16,7 +16,7 @@ export class MapComponent implements OnInit, OnChanges {
   
   events: Event[] = [];
   selectedEvents: Event[] = [];
-  detailsHeight: Number = 0;
+  detailsHeight: number = 0;
   map: LeafletMap;
   locations: Location[];
   mapMarkers: Marker<any>[] = [];
