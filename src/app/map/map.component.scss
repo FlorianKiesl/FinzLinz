@@ -1,9 +1,12 @@
 .flex-container{
   display: inline-block;  
+  box-sizing: border-box;
   width: 100%;
-  height: 50vh;
+  height: 80%;
   overflow: hidden;
-  //padding: 5px;
+  position: absolute;
+  padding-left: 0%;
+  margin-top: 10px;
 }
 
 .flex-container > .map{
@@ -16,7 +19,8 @@
   align-items: center;
 
   width: 100%;
-  height: 70%;
+
+  position: relative;
 }
 
 .flex-container > .events{
@@ -29,13 +33,16 @@
   overflow-y: hidden;
   text-align: left;
   justify-content: left;
+  width: 100%;
   height: 30%;
+
   min-width: 0;
 }
 
 .event-card{
   width: 200px;
   min-width: 200px;
+  
   background-color: white;
 }
 
@@ -50,13 +57,16 @@
 
 
 .event-card {
+  word-wrap: break-word;
+  overflow-wrap: break-word; 
+  white-space: normal;
   cursor: pointer;
   text-align: left;
   margin: 4px 2px 4px 2px;
-
+  min-height: 90px;
   width: 200px;
 }
 
 .mat-raised-button {
-  line-height: auto;
+  line-height: normal;
 }

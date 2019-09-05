@@ -19,6 +19,8 @@ import { registerLocaleData } from '@angular/common';
 import localeDEAT from '@angular/common/locales/de-AT';
 import localeDEATExtra from '@angular/common/locales/extra/de-AT';
 import { EventdetailsComponent } from './eventdetails/eventdetails.component';
+import { RouterModule, Routes } from '@angular/router';
+import { map } from 'leaflet';
 
 registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
 
@@ -33,6 +35,14 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule.forRoot(
+      [
+        { path: '', component:EventsComponent },
+        { path: 'map', component: MapComponent },
+        { path: 'list', component: EventsComponent } 
+      ],
+      { enableTracing: true }
+    ),
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
 import {MatDialog} from '@angular/material';
@@ -7,21 +7,29 @@ import { EventOccurence } from '../eventOccurence';
 import { formatDate } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { saveAs } from 'file-saver';
+import { OrganizerService } from '../organizer.service';
+import { EventsfilterComponent } from '../eventsfilter/eventsfilter.component';
+import { EventsfilterService } from '../eventsfilter.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
-export class EventsComponent implements OnInit, OnChanges {
+export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() filter: Map<String, any>;
   @Input() organizers: Organizer[];
 
   sortItem: string = "Sortiert nach";
   sortedItem = 2;
   events: Event[] = [];
+  subscription: Subscription;
 
-  constructor(public eventDetailsDialog:MatDialog) {
+  constructor(
+    private organizerService:OrganizerService, 
+    private eventsfilterService: EventsfilterService, 
+    public eventDetailsDialog:MatDialog) {
     
    }
 
@@ -32,7 +40,21 @@ export class EventsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.filter = this.eventsfilterService.getFilterMap();
+
+    this.subscription = this.eventsfilterService.eventsfilter.subscribe( filterMap => {
+      this.filter = filterMap;
+      this.events = this.filter.get('filteredEvents');
+      }
+    );
+
+    this.events = this.filter.get("filteredEvents");
+    this.setOrganizers();
     // navigator.geolocation.getCurrentPosition(this.displayLocationInfo, this.handleLocationError, { maximumAge: 1500000, timeout: 0 })
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   openEventDetails(event:Event){
@@ -43,6 +65,12 @@ export class EventsComponent implements OnInit, OnChanges {
       console.log("Dialog closed: ${result}");
     })
     console.log(event);
+  }
+
+  setOrganizers(): void {
+    this.organizerService.getOrganizers().subscribe(organizors => {
+      this.organizers = organizors.sort( (a, b) => a.name.localeCompare(b.name) );
+    });
   }
 
   // displayLocationInfo(position) {
@@ -73,6 +101,7 @@ export class EventsComponent implements OnInit, OnChanges {
   // }
   
   ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
     if (changes["filter"]) {
       this.events = this.filter.get("filteredEvents");
       if (this.events) {
@@ -80,6 +109,8 @@ export class EventsComponent implements OnInit, OnChanges {
       }
     }
   }
+
+  
 
   onSortByNameClick() {
     this.events.sort((e1, e2) => e1.title.localeCompare(e2.title))

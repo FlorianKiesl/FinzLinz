@@ -7,6 +7,10 @@ import { OrganizerService } from './organizer.service';
 import { Category } from './category';
 import { CategoryService } from './category.service';
 import { filter } from 'rxjs/operators';
+import { EventsfilterService } from './eventsfilter.service';
+import { Route } from '@angular/compiler/src/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { isObject } from 'util';
 
 @Component({
   selector: 'app-root',
@@ -20,11 +24,20 @@ export class AppComponent implements OnInit {
   filter: Map<String, any>;
   categories: Category[];
 
+  lines: String[] = ["Haoolll", "Haoolll", "Haoolll", "Haoolll", "Haoolll", "Haoolll"]
+
   constructor(
     private eventService: EventService, 
     private organizerService: OrganizerService, 
-    private categoryService: CategoryService) {
-      this.filter = new Map<String, any>();
+    private categoryService: CategoryService,
+    private eventsfilterService: EventsfilterService,
+    private route:Router) {
+      // this.filter = new Map<String, any>();
+      this.route.events.subscribe(e => {
+        if (e instanceof NavigationEnd) {
+          this.onFilterChanged(this.filter)
+        }
+      });
   }
 
   setEvents(): void {
@@ -60,6 +73,9 @@ export class AppComponent implements OnInit {
   }
 
   onFilterChanged(filterMap: Map<String, any>){
+    console.log(filterMap)
+    //this.eventsfilterService.setFilterMap(filterMap);
+    this.eventsfilterService.filterEvents(filterMap);
     this.filter = filterMap;
   }
 

@@ -1,17 +1,20 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { icon, latLng, Layer, Map as LeafletMap, marker, Marker, tileLayer, LatLngExpression, MarkerOptions, Icon } from 'leaflet';
 import { Event } from '../event';
 import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
 import { Location } from '../location';
 import { LocationService } from '../location.service';
+import { HostListener } from "@angular/core";
+import { EventsfilterService } from '../eventsfilter.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() filter: Map<String, any>
   
   events: Event[] = [];
@@ -21,7 +24,8 @@ export class MapComponent implements OnInit, OnChanges {
   locations: Location[];
   mapMarkers: Marker<any>[] = [];
   selectedMarker: Marker;
-  
+  subscription: Subscription;
+
   layer: Layer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   });
@@ -32,7 +36,14 @@ export class MapComponent implements OnInit, OnChanges {
     iconAnchor: [ 13, 41 ],
     iconUrl: 'leaflet/marker-icon.png',
     shadowUrl: 'leaflet/marker-shadow.png'
-  })
+  });
+
+  markedIcon: Icon = icon({
+    iconSize: [ 25, 41 ],
+    iconAnchor: [ 13, 41 ],
+    iconUrl: 'https://gkv.com/wp-content/uploads/leaflet-maps-marker-icons/map_marker-red.png',
+    shadowUrl: 'leaflet/marker-shadow.png'
+  });
 
   layers: any[] = [
     this.layer
@@ -45,9 +56,13 @@ export class MapComponent implements OnInit, OnChanges {
     center: latLng([ 48.30639, 14.28611 ])
   };
 
-  constructor(private locationService: LocationService, public eventDetailsDialog:MatDialog, private zone: NgZone) { }
+  constructor(
+    private locationService: LocationService, 
+    private eventsfilterService: EventsfilterService,
+    public eventDetailsDialog:MatDialog, private zone: NgZone) { }
 
   ngOnInit() {
+    console.log('hallo');
     //console.log(L.map('map'));
     if (this.map) {
       for(var i = 0; i < this.mapMarkers.length; i++){
@@ -55,18 +70,45 @@ export class MapComponent implements OnInit, OnChanges {
       }
       this.redraw(this.map)
     }
+
+    this.filter = this.eventsfilterService.getFilterMap();
+    if (this.filter) {
+      this.events = this.filter.get('filteredEvents');
+      if (this.map) {
+        for(var i = 0; i < this.mapMarkers.length; i++){
+          this.map.removeLayer(this.mapMarkers[i]);
+        }
+        this.redraw(this.map)
+      }
+    }
+
+    this.subscription = this.eventsfilterService.eventsfilter.subscribe( filterMap => {
+      this.filter = filterMap;
+      this.events = this.filter.get('filteredEvents');
+      if (this.map) {
+        for(var i = 0; i < this.mapMarkers.length; i++){
+          this.map.removeLayer(this.mapMarkers[i]);
+        }
+        this.redraw(this.map)
+      }
+    });
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['filter']){
-      this.events = this.filter.get('filteredEvents');
-    }
-    if (this.map) {
-      for(var i = 0; i < this.mapMarkers.length; i++){
-        this.map.removeLayer(this.mapMarkers[i]);
-      }
-      this.redraw(this.map)
-    }
+  //   if (changes['filter']){
+  //     this.events = this.filter.get('filteredEvents');
+  //   }
+  //   if (this.map) {
+  //     for(var i = 0; i < this.mapMarkers.length; i++){
+  //       this.map.removeLayer(this.mapMarkers[i]);
+  //     }
+  //     this.redraw(this.map)
+  //   }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   async getLocations(): Promise<Location[]> {
@@ -101,7 +143,6 @@ export class MapComponent implements OnInit, OnChanges {
       this.map.removeLayer(this.mapMarkers[i]);
     }
     this.addMarkers();
-    //this.map.invalidateSize(); 
   }
 
   private addMarkers() {
@@ -143,7 +184,7 @@ export class MapComponent implements OnInit, OnChanges {
         
         m.setIcon(this.defaultIcon);
 
-        m.on('click', this.click.bind(this))
+        m.on('click', this.onMarkerClick.bind(this))
         this.mapMarkers.push(m);
 
         m.bindTooltip(htmlToolTip).addTo(this.map);
@@ -160,42 +201,29 @@ export class MapComponent implements OnInit, OnChanges {
 
 
   refresh() {
-    this.map.invalidateSize(); 
+    this.detailsHeight = 1;
+    this.map.invalidateSize();
+    this.detailsHeight = 0;
+    console.log(this.map.getSize()) 
+    console.log(window.innerHeight)
+
   }
 
-  doDetails() {
-      console.log("Hallo");
-  }
-
-  click(e) {
+  onMarkerClick(e) {
+    console.log(this.events)
     if (this.selectedMarker) {
-      this.selectedMarker.setIcon(icon({
-        iconSize: [ 25, 41 ],
-        iconAnchor: [ 13, 41 ],
-        iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-orange.png',
-        shadowUrl: 'leaflet/marker-shadow.png'
-      }));
+      this.selectedMarker.setIcon(this.defaultIcon); // Maybe use here a marker which shows that this has been already viewed...
     }
 
     this.selectedMarker = e.target;
-    this.detailsHeight = 30;
+    this.detailsHeight = 20;
 		this.zone.run(() => {
-      this.map.setView(this.selectedMarker.getLatLng(), 14);
-      var myIcon = icon({
-        iconSize: [ 25, 41 ],
-        iconAnchor: [ 13, 41 ],
-        iconUrl: 'https://gkv.com/wp-content/uploads/leaflet-maps-marker-icons/map_marker-red.png',
-        shadowUrl: 'leaflet/marker-shadow.png'
-      });
+      this.map.setView(this.selectedMarker.getLatLng(), this.map.getZoom());
+      var myIcon = this.markedIcon;
       e.target.setIcon(myIcon);
 
       this.selectedEvents = this.getEventsToLocation(e.target.locationID);
-      //this.openEventDetails(this.selectedEvents[0]);
     });
-    
-    
-    //this.changeDetector.detectChanges();
-    console.log(this.selectedEvents)
   }
   
   openEventDetails(event:Event){
