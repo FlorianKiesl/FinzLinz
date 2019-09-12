@@ -29,4 +29,8 @@ export class EventdetailsComponent implements OnInit {
     this.rating = star == this.rating ? -1 : star;
     console.log(this.rating)
   }
+
+  close(): void{
+    this.dialogRef.close();
+  }
 }

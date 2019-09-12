@@ -1,5 +1,10 @@
 mat-grid-tile {
-    background: lightblue;
+  background: lightblue;
+}
+
+.mat-dialog-content {
+  margin: 0px 0px 0px 0px !important;
+  max-height: 100% !important;
 }
 
 .example-spacer {
@@ -7,7 +12,7 @@ mat-grid-tile {
   }
 
 .example-icon {
-padding: 0 14px;
+  padding: 0 14px;
 }
 
 .rating-container button,
@@ -17,13 +22,7 @@ padding: 0 14px;
 
 .comment-form {
   min-width: 150px;
-  
   width: 100%;
-}
-
-.comment-user {
-  min-width: 150px;
-  max-width: 500px;
 }
 
 .comment-input {

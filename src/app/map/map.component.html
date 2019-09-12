@@ -1,4 +1,4 @@
-<div class="flex-container">
+<div class="map-content">
   <div class="map"
       leaflet
       (leafletMapReady)="onMapReady($event)"
@@ -6,7 +6,7 @@
       [ngStyle]="{'height.%': 100 - detailsHeight}">
   </div>
 
-  <div class="events" [hidden]="!selectedEvents" [ngStyle]="{'height.%': detailsHeight}">
+  <div class="bottombar" [hidden]="!selectedEvents" [ngStyle]="{'height.%': detailsHeight}">
     <!-- <mat-card class="event-card" *ngFor="let event of selectedEvents">
       <mat-card-header>
         <mat-card-title> {{ event.title }} </mat-card-title>

@@ -226,6 +226,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
   
+  //ToDo: Combine this with method in events component
   openEventDetails(event:Event){
     const eventDetailDialogRef = this.eventDetailsDialog.open(
       EventdetailsComponent, {data: event}

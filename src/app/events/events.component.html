@@ -27,52 +27,53 @@
   </mat-menu>
 </div>
 
+<div class="eventlist-content">
+  <mat-card class="event-card" *ngFor="let event of events">
+    <mat-card-header>
+      <mat-card-title class="title"> {{ event.title }} </mat-card-title>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star_border</mat-icon></a>
+      <mat-card-subtitle> 
+        <p>
+          <span class="bold">Nächste Veranstaltung: </span> 
+          <span>{{ this.getNextEventDateString(event) }}</span>
+          <!-- <span *ngIf="this.getNextEventDate(event) as eventDate; else dateNotDefined"> 
+            <span *ngIf="this.isToday(eventDate.dFrom)"> Heute </span>
+            <span *ngIf="this.isTomorrow(eventDate.dFrom)"> Morgen </span>
+            <span *ngIf="!this.isTomorrow(eventDate.dFrom) && !this.isToday(eventDate.dFrom)"> {{ eventDate.dFrom | date:'dd MMM yyyy' }}</span>
+            von {{ eventDate.dFrom | date:'HH:mm'}} - {{ eventDate.dTo  | date:'HH:mm' }}
+          </span>
+          
+          <ng-template #dateNotDefined>
+              Keine Angaben
+          </ng-template> -->
+        </p>
+        <p>
+          <span class="bold">Veranstalter: </span> 
+          <ng-container *ngIf="getOrganizer(event) as organizer">
+            <a href="{{ organizer.link }}" target="_blank">
+              {{ organizer.name }}
+            </a>
+          </ng-container>
+        </p>
+        <p *ngIf="event['links']">
+          <a href="{{ event['links']['link'][1]['url'] }}" target="_blank">Website</a>
+        </p>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <span [innerHTML]="event.description | slice:0:800"></span> ...
+    </mat-card-content>
+    <mat-card-actions class="action-buttons">
+        <button mat-button color="primary"><mat-icon>comment</mat-icon> Kommentare</button>
+        <button mat-button color="primary" (click)="openEventDetails(event)"><mat-icon>visibility</mat-icon> Details</button>
+        <button mat-button color="primary" (click)="createEventICSFile(event)" download="file.txt"><mat-icon>share</mat-icon> Teilen</button>
+    </mat-card-actions>
+    <mat-card-footer>
 
-<mat-card class="event-card" *ngFor="let event of events">
-  <mat-card-header>
-    <mat-card-title class="title"> {{ event.title }} </mat-card-title>
-    <a><mat-icon>star</mat-icon></a>
-    <a><mat-icon>star</mat-icon></a>
-    <a><mat-icon>star</mat-icon></a>
-    <a><mat-icon>star</mat-icon></a>
-    <a><mat-icon>star_border</mat-icon></a>
-    <mat-card-subtitle> 
-      <p>
-        <span class="bold">Nächste Veranstaltung: </span> 
-        <span>{{ this.getNextEventDateString(event) }}</span>
-        <!-- <span *ngIf="this.getNextEventDate(event) as eventDate; else dateNotDefined"> 
-          <span *ngIf="this.isToday(eventDate.dFrom)"> Heute </span>
-          <span *ngIf="this.isTomorrow(eventDate.dFrom)"> Morgen </span>
-          <span *ngIf="!this.isTomorrow(eventDate.dFrom) && !this.isToday(eventDate.dFrom)"> {{ eventDate.dFrom | date:'dd MMM yyyy' }}</span>
-          von {{ eventDate.dFrom | date:'HH:mm'}} - {{ eventDate.dTo  | date:'HH:mm' }}
-        </span>
-        
-        <ng-template #dateNotDefined>
-            Keine Angaben
-        </ng-template> -->
-      </p>
-      <p>
-        <span class="bold">Veranstalter: </span> 
-        <ng-container *ngIf="getOrganizer(event) as organizer">
-          <a href="{{ organizer.link }}" target="_blank">
-            {{ organizer.name }}
-          </a>
-        </ng-container>
-      </p>
-      <p *ngIf="event['links']">
-        <a href="{{ event['links']['link'][1]['url'] }}" target="_blank">Website</a>
-      </p>
-    </mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <span [innerHTML]="event.description | slice:0:800"></span> ...
-  </mat-card-content>
-  <mat-card-actions class="action-buttons">
-      <button mat-button color="primary"><mat-icon>comment</mat-icon> Kommentare</button>
-      <button mat-button color="primary" (click)="openEventDetails(event)"><mat-icon>visibility</mat-icon> Details</button>
-      <button mat-button color="primary" (click)="createEventICSFile(event)" download="file.txt"><mat-icon>share</mat-icon> Teilen</button>
-  </mat-card-actions>
-  <mat-card-footer>
-
-  </mat-card-footer>
-</mat-card>
+    </mat-card-footer>
+  </mat-card>
+</div>

@@ -59,7 +59,14 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
   openEventDetails(event:Event){
     const eventDetailDialogRef = this.eventDetailsDialog.open(
-      EventdetailsComponent, {data: event}
+      EventdetailsComponent, {
+        data: event,
+        panelClass: "myapp-no-padding-dialog",
+        width: "100%",
+        height: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+      }
     );
     eventDetailDialogRef.afterClosed().subscribe(result => {
       console.log("Dialog closed: ${result}");
