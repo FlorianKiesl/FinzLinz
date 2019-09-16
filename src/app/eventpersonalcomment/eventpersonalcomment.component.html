@@ -1,0 +1,34 @@
+<div class="personal_comment_container">
+    <h2>Deine Bewertung</h2>
+    <form class="comment-form">
+      <mat-form-field class="comment-user">
+        <input matInput placeholder="User" value="Guest User">
+      </mat-form-field>
+      <div class="rating-container">
+          <button mat-icon-button (click)="setRating(1)">
+            <mat-icon *ngIf="rating > 0; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(2)">
+            <mat-icon *ngIf="rating > 1; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon [inline]="true">star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(3)">
+            <mat-icon *ngIf="rating > 2; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(4)">
+            <mat-icon *ngIf="rating > 3; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+          <button mat-icon-button (click)="setRating(5)">
+            <mat-icon *ngIf="rating > 4; else no_star">star</mat-icon>
+            <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+          </button>
+        </div>
+      <mat-form-field class="comment-input">
+        <textarea matInput placeholder="Kommentiere das Event"></textarea>
+      </mat-form-field>
+      <button mat-button color="primary">Senden</button>
+    </form>  
+  </div>

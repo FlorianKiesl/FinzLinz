@@ -7,7 +7,7 @@ import {
   MatButtonModule, MatCardModule, MatTabsModule, MatMenuModule, MatToolbarModule, 
   MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatFormFieldModule, 
   MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatAutocompleteModule, 
-  MatOptionModule, MatDividerModule, MatGridListModule, MatDialogModule, MatRippleModule 
+  MatOptionModule, MatDividerModule, MatGridListModule, MatDialogModule, MatRippleModule, MatDialog 
 } from '@angular/material';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +21,9 @@ import localeDEATExtra from '@angular/common/locales/extra/de-AT';
 import { EventdetailsComponent } from './eventdetails/eventdetails.component';
 import { RouterModule, Routes } from '@angular/router';
 import { map } from 'leaflet';
+import { Event } from './event';
+import { EventcommentsComponent } from './eventcomments/eventcomments.component';
+import { EventpersonalcommentComponent } from './eventpersonalcomment/eventpersonalcomment.component';
 
 registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
 
@@ -30,7 +33,9 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     EventsComponent,
     MapComponent,
     EventsfilterComponent,
-    EventdetailsComponent
+    EventdetailsComponent,
+    EventcommentsComponent,
+    EventpersonalcommentComponent
   ],
   imports: [
     BrowserModule,
@@ -76,4 +81,5 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
   ]
 })
 export class AppModule { 
+
 }

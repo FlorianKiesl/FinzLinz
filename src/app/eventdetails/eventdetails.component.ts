@@ -8,8 +8,6 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 })
 export class EventdetailsComponent implements OnInit {
 
-  rating:number = -1;
-
   event: Event;
 
   constructor(
@@ -23,11 +21,6 @@ export class EventdetailsComponent implements OnInit {
 
   onHomeClick(): void {
     this.dialogRef.close();
-  }
-
-  setRating(star:number){
-    this.rating = star == this.rating ? -1 : star;
-    console.log(this.rating)
   }
 
   close(): void{

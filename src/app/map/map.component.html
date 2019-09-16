@@ -23,7 +23,7 @@
     </mat-card-actions>
     </mat-card> -->
 
-    <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="openEventDetails(event)">
+    <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="utils.openEventDetails(event)">
       <div><span>{{ event.title }}</span></div>
       <div>
         <mat-icon>star</mat-icon>

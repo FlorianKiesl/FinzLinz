@@ -8,9 +8,9 @@ import { formatDate } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { saveAs } from 'file-saver';
 import { OrganizerService } from '../organizer.service';
-import { EventsfilterComponent } from '../eventsfilter/eventsfilter.component';
 import { EventsfilterService } from '../eventsfilter.service';
 import { Subscription } from 'rxjs';
+import { UtilsService } from '../utils.service';
 
 @Component({
   selector: 'app-events',
@@ -29,7 +29,7 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private organizerService:OrganizerService, 
     private eventsfilterService: EventsfilterService, 
-    public eventDetailsDialog:MatDialog) {
+    public utils:UtilsService) {
     
    }
 
@@ -55,23 +55,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-
-  openEventDetails(event:Event){
-    const eventDetailDialogRef = this.eventDetailsDialog.open(
-      EventdetailsComponent, {
-        data: event,
-        panelClass: "myapp-no-padding-dialog",
-        width: "100%",
-        height: "100%",
-        maxWidth: "100%",
-        maxHeight: "100%",
-      }
-    );
-    eventDetailDialogRef.afterClosed().subscribe(result => {
-      console.log("Dialog closed: ${result}");
-    })
-    console.log(event);
   }
 
   setOrganizers(): void {
@@ -116,8 +99,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
-
-  
 
   onSortByNameClick() {
     this.events.sort((e1, e2) => e1.title.localeCompare(e2.title))
@@ -168,28 +149,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
   createEventICSFile(event:Event){
     let event_date = event.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
-    var content = 
-      'BEGIN:VCALENDAR'+ '\r\n' +
-      'PRODID:Calendar'+ '\n' +
-      'VERSION:2.0'+ '\n' +
-      'BEGIN:VEVENT'+ '\n' +
-      'UID:0@default'+ '\n' +
-      'CLASS:PUBLIC'+ '\n' +
-      'DESCRIPTION:' + event.title + '\n' +
-      'DTSTAMP;VALUE=DATE-TIME:' + formatDate(new Date(Date.now()),  'yyyyMMddTHHmmss', 'deAT') + '\n' +
-      'DTSTART;VALUE=DATE-TIME:'+ formatDate(event_date.dFrom, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
-      'DTEND;VALUE=DATE-TIME:'+ formatDate(event_date.dTo, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
-      //how to get organizername? 
-      'LOCATION:' + event.organizer +  '\n' +
-      'TRANSP:TRANSPARENT' + '\n' +
-      'END:VEVENT' + '\n' +
-      'END:VCALENDAR'
-    var filename = 'export.ics'
-
-    var blob = new Blob([content], {
-     type: "text/plain;charset=utf-8"
-    });
-    
-    saveAs(blob, filename);
+    this.utils.createEventICSFile(event, event_date)
   }
 }

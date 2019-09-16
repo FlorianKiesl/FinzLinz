@@ -1,0 +1,78 @@
+<div class="comments-overview">
+  <div>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>
+      <a><mat-icon>star</mat-icon></a>  
+      <span>60% (6)</span>
+  </div>
+<div>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <span>10% (1)</span>
+  </div>
+  <div>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <span>10% (1)</span>
+  </div>
+  <div>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <span>10% (1)</span>
+  </div>
+  <div>
+    <a><mat-icon>star</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <a><mat-icon>star_border</mat-icon></a>
+    <span>10% (1)</span>
+  </div>
+  <div><span>Gesamt: 10 Bewertungen</span></div>
+</div>
+<mat-divider></mat-divider>
+<div class="comments-container">
+    <div class="comment-container" *ngFor="let comment of comments">
+        <div>
+            <div>{{comment.user_name}}</div> 
+            <div class="comment-date">{{utils.getDateFormated(comment.published)}}</div>
+            
+        </div>
+        <div>
+            <a>
+              <mat-icon *ngIf="comment.rating > 0; else no_star">star</mat-icon>
+              <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+            </a>
+            <a>
+              <mat-icon *ngIf="comment.rating > 1; else no_star">star</mat-icon>
+              <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+            </a>
+            <a>
+              <mat-icon *ngIf="comment.rating > 2; else no_star">star</mat-icon>
+              <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+            </a>
+            <a>
+              <mat-icon *ngIf="comment.rating > 3; else no_star">star</mat-icon>
+              <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+            </a>
+            <a>
+              <mat-icon *ngIf="comment.rating > 4; else no_star">star</mat-icon>
+              <ng-template #no_star><mat-icon>star_border</mat-icon></ng-template>
+            </a>
+        </div>
+
+        <p>{{comment.text}}</p>
+        <mat-divider></mat-divider>
+    </div>
+  </div>

@@ -4,10 +4,9 @@ import { EventOccurence } from './eventOccurence';
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
 import { formatDate } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
 
 export class Event {
-    
+
     constructor(public id:number, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
          public categories: any, public organizer: EventOrganizer, public datumstring: string) {
@@ -74,6 +73,8 @@ export class Event {
         if (!eventOccurence) {
           return 'keine Veranstaltung in ausgewählten Zeitraum gefunden';
         }
+
+        // ToDo: Combine this in utils....
         let dateString = '';
         if (this.isToday(eventOccurence.dFrom)) {
           dateString = 'Heute'

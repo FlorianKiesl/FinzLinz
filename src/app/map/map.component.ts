@@ -1,13 +1,11 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { icon, latLng, Layer, Map as LeafletMap, marker, Marker, tileLayer, LatLngExpression, MarkerOptions, Icon } from 'leaflet';
 import { Event } from '../event';
-import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
 import { Location } from '../location';
 import { LocationService } from '../location.service';
-import { HostListener } from "@angular/core";
 import { EventsfilterService } from '../eventsfilter.service';
 import { Subscription } from 'rxjs';
+import { UtilsService } from '../utils.service';
 
 @Component({
   selector: 'app-map',
@@ -59,7 +57,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private locationService: LocationService, 
     private eventsfilterService: EventsfilterService,
-    public eventDetailsDialog:MatDialog, private zone: NgZone) { }
+    private zone: NgZone, private utils: UtilsService) { }
 
   ngOnInit() {
     console.log('hallo');
@@ -155,29 +153,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
           location.latitude = 48.30639;
           location.longitude = 14.28611;
         }
-        let html = "<p><b>" + location.name + "</b></p>";
-        let htmlToolTip = html;
-        let counter = 0;
-        for (let event of eventsToLocation) {
-          let html_event = "<div height=\"200px\"><p>" +
-          "<a href=&quot;#&quot;>" + event.title + "</a>" + 
-          "<br>Nächste Veranstaltung: " + event.getNextEventDateBetweenString(this.filter.get('dateStart'), this.filter.get('dateEnd')) + "</p></div>";
-
-          html = html + html_event;
-          counter++;
-          if (counter <= 3) {
-            htmlToolTip = html;
-          }
-          
-        }
-        if (counter > 3) {
-          htmlToolTip = htmlToolTip + "<div height=\"200px\"><p></p></div>"
-          htmlToolTip = htmlToolTip + (eventsToLocation.length - 3) + " weitere Veranstaltungen"
-        }
-        else {
-          htmlToolTip = html
-        }
-
+        let htmlInfo = "<p><b>" + location.name + "</b></p>" + "<p>" + eventsToLocation.length + " Veranstaltung(en)</p>";
         let m = new EventMarker([ location.latitude, location.longitude ], {},
           location.id
         );
@@ -187,8 +163,12 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
         m.on('click', this.onMarkerClick.bind(this))
         this.mapMarkers.push(m);
 
-        m.bindTooltip(htmlToolTip).addTo(this.map);
+        m.bindTooltip(htmlInfo, {
+          direction: "bottom"
+        }).addTo(this.map);
 
+        m.bindPopup(htmlInfo, {
+        }).addTo(this.map)
       }
     }
   }
@@ -224,17 +204,6 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
       this.selectedEvents = this.getEventsToLocation(e.target.locationID);
     });
-  }
-  
-  //ToDo: Combine this with method in events component
-  openEventDetails(event:Event){
-    const eventDetailDialogRef = this.eventDetailsDialog.open(
-      EventdetailsComponent, {data: event}
-    );
-    eventDetailDialogRef.afterClosed().subscribe(result => {
-      console.log("Dialog closed: ${result}");
-    })
-    console.log(event);
   }
 }
 
