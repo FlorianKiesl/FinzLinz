@@ -14,15 +14,6 @@ export class EventpersonalcommentComponent implements OnInit {
   userName:String = '';
   text:String = '';
 
-  private userNameFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-  private textFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-
   constructor() { }
 
   ngOnInit() {

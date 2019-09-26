@@ -1,10 +1,10 @@
 export class Comment {
     constructor(
-        public id: Number,
+        public id: number,
         public user_name: String,
-        public user_id: Number,
+        public user_id: number,
         public published: Date,
-        public rating: Number,
+        public rating: number,
         public text: String
     ) {
 
