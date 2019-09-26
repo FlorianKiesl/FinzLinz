@@ -1,4 +1,5 @@
 <div class="comments-overview">
+  <div class="comments-overview-heading"><span>Gesamt: 10 Bewertungen</span></div>
   <div>
       <a><mat-icon>star</mat-icon></a>
       <a><mat-icon>star</mat-icon></a>
@@ -7,7 +8,7 @@
       <a><mat-icon>star</mat-icon></a>  
       <span>60% (6)</span>
   </div>
-<div>
+  <div>
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star</mat-icon></a>
@@ -39,7 +40,15 @@
     <a><mat-icon>star_border</mat-icon></a>
     <span>10% (1)</span>
   </div>
-  <div><span>Gesamt: 10 Bewertungen</span></div>
+</div>
+<mat-divider></mat-divider>
+<div class="comments-personal-comment-container">
+    <button mat-button color="primary" (click)="personalCommentFormBtnClicked()">
+      Eigene Bewertung verfassen 
+      <mat-icon *ngIf="showPersonalCommentForm == 0; else keyboard_arrow_up">keyboard_arrow_down</mat-icon>
+      <ng-template #keyboard_arrow_up><mat-icon>keyboard_arrow_up</mat-icon></ng-template>
+    </button>
+    <app-eventpersonalcomment class="personal-comment-form" (newComment)="onNewComment($event)" [hidden]="!showPersonalCommentForm" color="primary"></app-eventpersonalcomment>
 </div>
 <mat-divider></mat-divider>
 <div class="comments-container">

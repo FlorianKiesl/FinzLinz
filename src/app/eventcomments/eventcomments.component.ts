@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Comment } from '../comment';
 import { UtilsService } from '../utils.service';
+import { CommentService } from '../comment.service';
 
 @Component({
   selector: 'app-eventcomments',
@@ -8,17 +9,30 @@ import { UtilsService } from '../utils.service';
   styleUrls: ['./eventcomments.component.scss']
 })
 export class EventcommentsComponent implements OnInit {
+  private comments: Comment[];
+  private showPersonalCommentForm:Boolean = false;
 
-  private comments: Comment[] = [];
+  constructor(private commenService:CommentService, public utils:UtilsService) {
 
-  constructor(public utils:UtilsService) {
-    this.comments.push(new Comment(1, "Test User", 1, new Date(), 4, "Super."));
-    this.comments.push(new Comment(2, "Test User 2", 1, new Date(), 3, "Super."));
-   }
-
-  ngOnInit() {
   }
 
+  ngOnInit() {
+    this.setComments();
+  }
 
+  private setComments() {
+    this.commenService.getComments(1).subscribe( comments => {
+      this.comments = comments;
+    })
+  }
+
+  private personalCommentFormBtnClicked(){
+    this.showPersonalCommentForm = !this.showPersonalCommentForm;
+    
+  }
+
+  private onNewComment(newComment: Comment) {
+    this.comments.push(newComment);
+  }
 
 }

@@ -1,8 +1,11 @@
-<div class="personal_comment_container">
+<div class="personal-comment-container">
     <h2>Deine Bewertung</h2>
     <form class="comment-form">
       <mat-form-field class="comment-user">
-        <input matInput placeholder="User" value="Guest User">
+        <input matInput placeholder="User" type="text" value="Guest User" [(ngModel)]="userName" [ngModelOptions]="{standalone: true}">
+        <button mat-button *ngIf="userName" matSuffix mat-icon-button aria-label="Clear" (click)="userName=''">
+            <mat-icon>close</mat-icon>
+          </button>
       </mat-form-field>
       <div class="rating-container">
           <button mat-icon-button (click)="setRating(1)">
@@ -27,8 +30,11 @@
           </button>
         </div>
       <mat-form-field class="comment-input">
-        <textarea matInput placeholder="Kommentiere das Event"></textarea>
+        <textarea matInput placeholder="Kommentiere das Event" [(ngModel)]="text" [ngModelOptions]="{standalone: true}"></textarea>
+        <button mat-button *ngIf="text" matSuffix mat-icon-button aria-label="Clear" (click)="text=''">
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
-      <button mat-button color="primary">Senden</button>
+      <button mat-flat-button color="primary" (click)="addPersonalComment()">Bewertung senden</button>
     </form>  
   </div>
