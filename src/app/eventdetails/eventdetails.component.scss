@@ -28,3 +28,13 @@ mat-grid-tile {
 .comment-input {
   width: 100%;
 }
+
+.termine-container {
+  text-align: center;
+}
+
+.termine-container mat-card {
+  width: 40%;
+  min-width: 300px;
+  align-content: center;
+}
