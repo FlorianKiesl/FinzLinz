@@ -1,12 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Event } from '../event';
 import { Organizer } from '../organizer';
-import {MatDialog} from '@angular/material';
-import { EventdetailsComponent } from '../eventdetails/eventdetails.component';
-import { EventOccurence } from '../eventOccurence';
-import { formatDate } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
-import { saveAs } from 'file-saver';
 import { OrganizerService } from '../organizer.service';
 import { EventsfilterService } from '../eventsfilter.service';
 import { Subscription } from 'rxjs';
@@ -35,7 +29,7 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
   getOrganizer(event:Event): Organizer {
     return (this.organizers && event.organizer ? 
-      this.organizers.find(function(item){return item["id"] == event.organizer.id}) 
+      this.organizers.find(function(item){return item.id == event.organizer.id}) 
       : undefined)
   }
 
@@ -48,7 +42,7 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
       }
     );
 
-    this.events = this.filter.get("filteredEvents");
+    this.events = this.filter ? this.filter.get("filteredEvents"): undefined;
     this.setOrganizers();
     // navigator.geolocation.getCurrentPosition(this.displayLocationInfo, this.handleLocationError, { maximumAge: 1500000, timeout: 0 })
   }

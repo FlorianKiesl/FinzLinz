@@ -1,0 +1,10 @@
+<div class="starrating">
+  <a *ngFor="let star of [].constructor(getIntegerStars())"><mat-icon>star</mat-icon></a>
+  <span *ngIf="getRemainder() > 0.0; else no_half_star">
+    <a><mat-icon>star_half</mat-icon></a>
+    <a *ngFor="let star of [].constructor(this.maxRating - getIntegerStars() - 1)"><mat-icon>star_border</mat-icon></a>
+  </span>
+  <ng-template #no_half_star>
+    <a *ngFor="let star of [].constructor(this.maxRating - getIntegerStars())"><mat-icon>star_border</mat-icon></a>
+  </ng-template>
+</div>

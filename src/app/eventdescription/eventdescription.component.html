@@ -1,0 +1,9 @@
+<p [innerHTML]="event?.description"></p>
+<mat-divider></mat-divider>
+
+<div *ngIf="event.links.length > 0">
+    <h2>Links:</h2>
+    <p *ngFor="let link of event.links">
+      <a href="{{link.url}}" target="_blank" [innerHTML]="link.info"></a>
+    </p>
+</div>

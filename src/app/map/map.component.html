@@ -25,13 +25,7 @@
 
     <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="utils.openEventDetails(event)">
       <div><span>{{ event.title }}</span></div>
-      <div>
-        <mat-icon>star</mat-icon>
-        <mat-icon>star</mat-icon>
-        <mat-icon>star</mat-icon>
-        <mat-icon>star</mat-icon>
-        <mat-icon>star_border</mat-icon>
-      </div>
+      <app-starrating class="app-starrating-map" [rating]="event.rating"></app-starrating>
     </button>
 
   </div>

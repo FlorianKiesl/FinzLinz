@@ -4,12 +4,13 @@ import { EventOccurence } from './eventOccurence';
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
 import { formatDate } from '@angular/common';
+import { Link } from './link';
 
 export class Event {
 
     constructor(public id:number, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
-         public categories: any, public organizer: EventOrganizer, public datumstring: string) {
+         public categories: any, public organizer: EventOrganizer, public datumstring: string, public rating:number, public links:Link[]) {
             this.date = this.getRepeatingOccurencesDates();
     }
 
@@ -105,6 +106,7 @@ export class Event {
 export class EventAdapter implements Adapter<Event>{
     adapt(item: any): Event {
         var occurences = [];
+        var links = []
         if (Array.isArray(item.date)) {
             for (let dateItem of item.date){
                 occurences.push(new EventOccurence(new Date(dateItem['@dFrom']), new Date(dateItem['@dTo'])));
@@ -112,6 +114,13 @@ export class EventAdapter implements Adapter<Event>{
         }
         else {
             occurences.push(new EventOccurence(new Date(item.date['@dFrom']), new Date(item.date['@dTo'])));
+        }
+
+        if (!Array.isArray(item.links.link)){
+            links.push(new Link(item.links.link.url, item.links.link.info))
+        }
+        else {
+            links = item.links.link
         }
 
         return new Event(
@@ -124,7 +133,9 @@ export class EventAdapter implements Adapter<Event>{
             item.location,
             item.categories,
             item.organizer,
-            item.datumstring
+            item.datumstring,
+            item.rating ? item.rating : 0,
+            links
         );
     }
 

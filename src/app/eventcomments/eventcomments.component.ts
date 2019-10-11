@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Comment } from '../comment';
 import { UtilsService } from '../utils.service';
 import { CommentService } from '../comment.service';
+import { Event } from '../event';
 
 @Component({
   selector: 'app-eventcomments',
@@ -9,6 +10,8 @@ import { CommentService } from '../comment.service';
   styleUrls: ['./eventcomments.component.scss']
 })
 export class EventcommentsComponent implements OnInit {
+  @Input() event: Event;
+
   private comments: Comment[];
   private showPersonalCommentForm:Boolean = false;
 
@@ -35,12 +38,12 @@ export class EventcommentsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setComments();
+    this.getComments();
     this.calcRatingResults();
   }
 
-  private setComments() {
-    this.commenService.getComments(1).subscribe( comments => {
+  private getComments() {
+    this.commenService.getComments(this.event.id).subscribe( comments => {
       this.comments = comments;
     })
   }
@@ -53,6 +56,8 @@ export class EventcommentsComponent implements OnInit {
   private onNewComment(newComment: Comment) {
     this.comments.push(newComment);
     this.calcRatingResults();
+    this.event.rating = (this.sumRating1*1 + this.sumRating2*2 + this.sumRating3*3 + this.sumRating4*4 + this.sumRating5*5) / this.sumRatings;
+
   }
 
   private calcRatingResults() {

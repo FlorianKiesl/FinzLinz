@@ -14,8 +14,8 @@ export class CommentService extends BaseService {
 
   constructor(protected http:HttpClient) {
     super(http, 'comments');
-    this.comments.push(new Comment(1, "Test User", 1, new Date(), 4, "Super."));
-    this.comments.push(new Comment(2, "Test User 2", 1, new Date(), 3, "Super."));
+    // this.comments.push(new Comment(1, "Test User", 1, new Date(), 4, "Super."));
+    // this.comments.push(new Comment(2, "Test User 2", 1, new Date(), 3, "Super."));
    }
 
    public getComments(eventId:Number): Observable<Comment[]> {

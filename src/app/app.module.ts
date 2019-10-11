@@ -24,6 +24,8 @@ import { map } from 'leaflet';
 import { Event } from './event';
 import { EventcommentsComponent } from './eventcomments/eventcomments.component';
 import { EventpersonalcommentComponent } from './eventpersonalcomment/eventpersonalcomment.component';
+import { StarratingComponent } from './starrating/starrating.component';
+import { EventdescriptionComponent } from './eventdescription/eventdescription.component';
 
 registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
 
@@ -35,7 +37,9 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     EventsfilterComponent,
     EventdetailsComponent,
     EventcommentsComponent,
-    EventpersonalcommentComponent
+    EventpersonalcommentComponent,
+    StarratingComponent,
+    EventdescriptionComponent
   ],
   imports: [
     BrowserModule,
