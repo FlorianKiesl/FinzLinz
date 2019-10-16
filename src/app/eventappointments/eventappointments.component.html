@@ -1,0 +1,26 @@
+<mat-toolbar>
+  <div>4 Termin(e) ausgewählt</div>
+    <span class="example-spacer"></span>
+    <button mat-icon-button (click)="select_all()"><mat-icon>select_all</mat-icon></button>
+    <button mat-icon-button (click)="exort()"  matBadge="4"><mat-icon>list</mat-icon></button>
+    <button mat-icon-button (click)="exort()"  matBadge="4"><mat-icon>share</mat-icon></button>
+</mat-toolbar>
+<mat-accordion>
+  <mat-expansion-panel>
+      <mat-expansion-panel-header>
+          <mat-panel-title>
+              <mat-icon>filter_list</mat-icon>
+          </mat-panel-title>
+          <mat-panel-description>
+              Wähle einen Zeitraum
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-datefilter class="datefilter-container"></app-datefilter>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-selection-list>
+  <mat-list-option *ngFor="let occurence of event.date">
+    {{ occurence.getString() }}
+  </mat-list-option>
+</mat-selection-list>
+

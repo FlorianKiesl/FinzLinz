@@ -1,0 +1,25 @@
+.datepicker-container {
+    display: flex;
+    flex-direction: row;
+}
+  
+.datepicker-container > * {
+    width: 100%;
+}
+
+.datepicker-container > .picker {
+    margin-right: 10px;
+    min-width: 100px;
+    width: 150px;
+}
+
+.shortcuts-container button {
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+  
+.shortcuts-container > .nextdays {
+    margin-right: 8px;
+    min-width: 80px;
+    width: 80px;
+}

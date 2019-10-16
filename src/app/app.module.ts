@@ -7,7 +7,7 @@ import {
   MatButtonModule, MatCardModule, MatTabsModule, MatMenuModule, MatToolbarModule, 
   MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatFormFieldModule, 
   MatDatepickerModule, MatNativeDateModule, MatInputModule, MatSelectModule, MatAutocompleteModule, 
-  MatOptionModule, MatDividerModule, MatGridListModule, MatDialogModule, MatRippleModule, MatDialog 
+  MatOptionModule, MatDividerModule, MatGridListModule, MatDialogModule, MatRippleModule, MatListOptionBase, MatBadgeModule 
 } from '@angular/material';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +26,8 @@ import { EventcommentsComponent } from './eventcomments/eventcomments.component'
 import { EventpersonalcommentComponent } from './eventpersonalcomment/eventpersonalcomment.component';
 import { StarratingComponent } from './starrating/starrating.component';
 import { EventdescriptionComponent } from './eventdescription/eventdescription.component';
+import { EventappointmentsComponent } from './eventappointments/eventappointments.component';
+import { DatefilterComponent } from './datefilter/datefilter.component';
 
 registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
 
@@ -39,7 +41,9 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     EventcommentsComponent,
     EventpersonalcommentComponent,
     StarratingComponent,
-    EventdescriptionComponent
+    EventdescriptionComponent,
+    EventappointmentsComponent,
+    DatefilterComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +76,8 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     MatOptionModule,
     MatInputModule,
     MatDialogModule,
+    MatListModule,
+    MatBadgeModule,
     ReactiveFormsModule,
     MatSelectModule,
     MatDividerModule,

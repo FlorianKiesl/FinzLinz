@@ -3,7 +3,6 @@ import { EventOrganizer } from './eventOrganizer';
 import { EventOccurence } from './eventOccurence';
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
-import { formatDate } from '@angular/common';
 import { Link } from './link';
 
 export class Event {
@@ -75,28 +74,7 @@ export class Event {
           return 'keine Veranstaltung in ausgewählten Zeitraum gefunden';
         }
 
-        // ToDo: Combine this in utils....
-        let dateString = '';
-        if (this.isToday(eventOccurence.dFrom)) {
-          dateString = 'Heute'
-        }
-        else if (this.isTomorrow(eventOccurence.dFrom)) {
-          dateString = 'Morgen'
-        }
-        else {
-          dateString = formatDate(eventOccurence.dFrom, 'dd MMM yyyy', 'deAT');
-        }
-        return dateString + ' von '   + formatDate(eventOccurence.dFrom, 'HH:mm', 'deAT') + ' - '+ formatDate(eventOccurence.dTo, 'HH:mm', 'deAT');
-    }
-
-    private isToday(date: Date): Boolean {
-        var today = new Date();
-        return (new Date(date)).setHours(0,0,0,0) == today.setHours(0, 0, 0, 0)
-    }
-    
-    private isTomorrow(date: Date): Boolean {
-        var today = new Date();
-        return (new Date(date)).setHours(0,0,0,0) == new Date(today.setDate(today.getDate() + 1)).setHours(0, 0, 0, 0)
+        return eventOccurence.getString();
     }
 }
 

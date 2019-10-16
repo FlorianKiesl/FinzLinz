@@ -1,0 +1,30 @@
+<div class="datepicker-container">
+    <mat-form-field class="picker">
+        <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerVon" placeholder="Von" [formControl]="dateStart">
+        <mat-datepicker-toggle matSuffix [for]="pickerVon"></mat-datepicker-toggle>
+        <mat-datepicker #pickerVon touchUi disabled="false"></mat-datepicker>
+        <button mat-button *ngIf="dateStart.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.dateStart.setValue(undefined)">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <mat-form-field class="picker">
+        <input matInput  [min]="minDate" [max]="maxDate" [matDatepicker]="pickerBis" placeholder="Bis" [formControl]="dateEnd">
+        <mat-datepicker-toggle matSuffix [for]="pickerBis"></mat-datepicker-toggle>
+        <mat-datepicker #pickerBis touchUi disabled="false"></mat-datepicker>
+        <button mat-button *ngIf="dateEnd.value" matSuffix mat-icon-button aria-label="Clear" (click)="this.dateEnd.setValue(undefined)">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+</div>
+
+<div class="shortcuts-container">
+    <button mat-button color="primary" (click)="onToday()">Heute</button>
+    <button mat-button color="primary" (click)="onTomorrow()">Morgen</button>
+    <mat-form-field class="nextdays">
+        <mat-select matNativeControl placeholder="In" [formControl]="nextDaysFormControl">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let days of nextDays" [value]="days">{{days}} Tagen</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
