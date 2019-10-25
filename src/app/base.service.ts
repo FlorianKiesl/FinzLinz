@@ -1,4 +1,4 @@
-import { Observable, of} from 'rxjs';
+import { Observable, of, throwError} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError} from 'rxjs/operators';
 
@@ -27,7 +27,7 @@ export class BaseService {
         console.log(`${operation} failed: ${error.message}`);
       
         // Let the app keep running by returning an empty result.
-        return of(result as T);
+        return throwError(error);
       };
     }
 }

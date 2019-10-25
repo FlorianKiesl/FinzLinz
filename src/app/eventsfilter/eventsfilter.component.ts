@@ -28,6 +28,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   nextDays: number[] = [2,3,4,5,6,7]
   categoriesFormControl = new FormControl();
   value: string;
+  expanded = 1;
 
   private filteredEventOptions:Event[];
   private filteredOrganizerOptions:Organizer[];
@@ -47,6 +48,11 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     filterMap.set('dateStart', this.dateStart.value);
     filterMap.set('dateEnd', this.dateEnd.value)
     this.filterChanged.emit(filterMap);
+    this.expanded = 1;
+  }
+
+  public setExpanded(open:number) {
+    this.expanded = open
   }
 
   public onReset() {

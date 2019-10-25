@@ -1,5 +1,5 @@
 <mat-accordion>
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="expanded === 0" (opened)="setExpanded(0)">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-icon>filter_list</mat-icon>

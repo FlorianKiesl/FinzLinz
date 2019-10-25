@@ -55,7 +55,7 @@
     <div class="comment-container" *ngFor="let comment of comments">
         <div>
             <div>{{comment.user_name}}</div> 
-            <div class="comment-date">{{utils.getDateFormated(comment.published)}}</div>
+            <div class="comment-date">{{ getDateFormated(comment.published)}}</div>
             
         </div>
         <div>

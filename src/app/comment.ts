@@ -1,6 +1,6 @@
 export class Comment {
     constructor(
-        public id: number,
+        public event_id: number,
         public user_name: String,
         public user_id: number,
         public published: Date,

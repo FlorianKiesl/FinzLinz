@@ -9,7 +9,8 @@ export class Event {
 
     constructor(public id:number, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
-         public categories: any, public organizer: EventOrganizer, public datumstring: string, public rating:number, public links:Link[]) {
+         public categories: any, public organizer: EventOrganizer, public datumstring: string, public rating:number, 
+         public ratingCount:number, public links:Link[]) {
             this.date = this.getRepeatingOccurencesDates();
     }
 
@@ -113,6 +114,7 @@ export class EventAdapter implements Adapter<Event>{
             item.organizer,
             item.datumstring,
             item.rating ? item.rating : 0,
+            item.ratingCount ? item.ratingCount : 0,
             links
         );
     }

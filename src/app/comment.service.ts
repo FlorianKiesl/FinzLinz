@@ -3,14 +3,12 @@ import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comment } from './comment';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService extends BaseService {
-
-
-  private comments: Comment[] = [];
 
   constructor(protected http:HttpClient) {
     super(http, 'comments');
@@ -19,12 +17,22 @@ export class CommentService extends BaseService {
    }
 
    public getComments(eventId:Number): Observable<Comment[]> {
-     return new Observable<Comment[]>((observer) => {
-       observer.next(this.comments);
-       observer.complete();
-       return {unsubscribe() {}}
-     })
+     return this.http.get<Comment[]>(this.httpURL + '/' + eventId.toString()).pipe(
+       catchError(super.handleError('getComments', []))
+     );
+    //  return new Observable<Comment[]>((observer) => {
+    //    observer.next(this.comments);
+    //    observer.complete();
+    //    return {unsubscribe() {}}
+    //  })
    }
+
+   public addComment(comment:any): Observable<string> {
+     return this.http.post(this.httpURL, comment, {responseType: 'text'}).pipe(
+       catchError(super.handleError('addComment', 'Comment could not be added'))
+     )
+   }
+
 
 
 }

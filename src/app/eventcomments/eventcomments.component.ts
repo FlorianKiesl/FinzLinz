@@ -33,19 +33,27 @@ export class EventcommentsComponent implements OnInit {
   private sumRating1:number = 0;
   private percRating1:number = 0;
 
-  constructor(private commenService:CommentService, public utils:UtilsService) {
-
+  constructor(private commenService:CommentService) {
+    this.comments = [];
   }
 
   ngOnInit() {
     this.getComments();
-    this.calcRatingResults();
   }
 
   private getComments() {
-    this.commenService.getComments(this.event.id).subscribe( comments => {
-      this.comments = comments;
-    })
+    this.commenService.getComments(this.event.id).subscribe( 
+      comments => {
+        this.comments = comments;
+        this.sortComments()
+        console.log(this.comments)
+        this.calcRatingResults();
+      },
+      error => {
+        this.comments = [];
+        console.log(error);
+      }
+    )
   }
 
   private personalCommentFormBtnClicked(){
@@ -54,10 +62,27 @@ export class EventcommentsComponent implements OnInit {
   }
 
   private onNewComment(newComment: Comment) {
-    this.comments.push(newComment);
-    this.calcRatingResults();
-    this.event.rating = (this.sumRating1*1 + this.sumRating2*2 + this.sumRating3*3 + this.sumRating4*4 + this.sumRating5*5) / this.sumRatings;
+    newComment.event_id = this.event.id
+    var json =  {
+      'event_id': newComment.event_id,
+      'user_id':  Math.floor((Math.random() * 100) + 1),
+      'user_name': newComment.user_name,
+      'rating': newComment.rating,
+      'text': newComment.text
+    }
+    this.commenService.addComment(json).subscribe(
+      comment => {
+        this.getComments();
+        console.log(comment)
+      },
+      error => {
+        console.log(error)
+      }
+    )
+  }
 
+  private sortComments() {
+    this.comments.sort((c1, c2) => new Date(c2.published).getTime() - new Date(c1.published).getTime())
   }
 
   private calcRatingResults() {
@@ -91,5 +116,9 @@ export class EventcommentsComponent implements OnInit {
     this.percRating3 = this.sumRating3 / this.sumRatings;
     this.percRating2 = this.sumRating2 / this.sumRatings;
     this.percRating1 = this.sumRating1 / this.sumRatings;
+  }
+
+  getDateFormated(published:Date):string {
+    return UtilsService.getDateFormated(published);
   }
 }

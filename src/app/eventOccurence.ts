@@ -1,22 +1,22 @@
 import { formatDate } from '@angular/common';
+import { UtilsService } from './utils.service';
 
 export class EventOccurence {
     constructor(public dFrom:Date, public dTo:Date){
-
     }
 
     public getString() {
-        let dateString = '';
-        if (this.isToday(this.dFrom)) {
-          dateString = 'Heute'
-        }
-        else if (this.isTomorrow(this.dFrom)) {
-          dateString = 'Morgen'
-        }
-        else {
-          dateString = formatDate(this.dFrom, 'EEE dd MMM yyyy', 'deAT');
-        }
-        return dateString + ' von '   + formatDate(this.dFrom, 'HH:mm', 'deAT') + ' - '+ formatDate(this.dTo, 'HH:mm', 'deAT');
+        // let dateString = '';
+        // if (this.isToday(this.dFrom)) {
+        //   dateString = 'Heute'
+        // }
+        // else if (this.isTomorrow(this.dFrom)) {
+        //   dateString = 'Morgen'
+        // }
+        // else {
+        //   dateString = formatDate(this.dFrom, 'EEE dd MMM yyyy', 'deAT');
+        // }
+        return UtilsService.getDateFormated(this.dFrom) + ' - '+ formatDate(this.dTo, 'HH:mm', 'deAT');
    
     }
     

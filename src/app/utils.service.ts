@@ -58,24 +58,25 @@ export class UtilsService {
     saveAs(blob, filename);
   }
 
-  getDateFormated(date:Date): String{
+  public static getDateFormated(date:Date): string{
     if (this.isToday(date)) {
-      return 'Heute'
+      return 'Heute ' + formatDate(date, 'HH:mm', 'deAT')
     }
     else if (this.isTomorrow(date)) {
-      return 'Morgen'
+      return 'Morgen '  + formatDate(date, 'HH:mm', 'deAT')
     }
     else {
-      return formatDate(date, 'dd MMM yyyy', 'deAT');
+      //return formatDate(date, 'dd MMM yyyy', 'deAT');
+      return formatDate(date, 'EEE dd MMM yyyy HH:mm', 'deAT');
     }
   }
   
-  private isToday(date: Date): Boolean {
+  private static isToday(date: Date): Boolean {
     var today = new Date();
     return (new Date(date)).setHours(0,0,0,0) == today.setHours(0, 0, 0, 0)
   }
 
-  private isTomorrow(date: Date): Boolean {
+  private static isTomorrow(date: Date): Boolean {
       var today = new Date();
       return (new Date(date)).setHours(0,0,0,0) == new Date(today.setDate(today.getDate() + 1)).setHours(0, 0, 0, 0)
   }
