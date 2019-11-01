@@ -28,6 +28,7 @@ import { StarratingComponent } from './starrating/starrating.component';
 import { EventdescriptionComponent } from './eventdescription/eventdescription.component';
 import { EventappointmentsComponent } from './eventappointments/eventappointments.component';
 import { DatefilterComponent } from './datefilter/datefilter.component';
+import { OrganizerOverviewComponent } from './organizer-overview/organizer-overview.component';
 
 registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
 
@@ -43,7 +44,8 @@ registerLocaleData(localeDEAT, 'deAT', localeDEATExtra);
     StarratingComponent,
     EventdescriptionComponent,
     EventappointmentsComponent,
-    DatefilterComponent
+    DatefilterComponent,
+    OrganizerOverviewComponent
   ],
   imports: [
     BrowserModule,

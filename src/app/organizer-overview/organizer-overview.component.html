@@ -1,0 +1,13 @@
+<div class="organizer-container" *ngIf="organizer">
+  <h1>{{organizer.name}}</h1>
+  <p>Adresse: {{organizer.street}}, {{organizer.postcode}} {{organizer.city}}</p>
+  <p>Telefonnummer: {{organizer.telephone}}</p>
+  <p><a href="{{ organizer.link }}"  target="_blank">Website</a></p>
+  <div class="map-content">
+      <div class="map"
+      leaflet
+      (leafletMapReady)="onMapReady($event)"
+      [leafletOptions]="options">
+    </div>
+  </div>
+</div>

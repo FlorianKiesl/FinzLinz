@@ -6,11 +6,8 @@ import { Organizer } from './organizer';
 import { OrganizerService } from './organizer.service';
 import { Category } from './category';
 import { CategoryService } from './category.service';
-import { filter } from 'rxjs/operators';
 import { EventsfilterService } from './eventsfilter.service';
-import { Route } from '@angular/compiler/src/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { isObject } from 'util';
 
 @Component({
   selector: 'app-root',
@@ -73,8 +70,6 @@ export class AppComponent implements OnInit {
   }
 
   onFilterChanged(filterMap: Map<String, any>){
-    console.log(filterMap)
-    //this.eventsfilterService.setFilterMap(filterMap);
     this.eventsfilterService.filterEvents(filterMap);
     this.filter = filterMap;
   }
