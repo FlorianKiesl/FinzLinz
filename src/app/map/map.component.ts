@@ -17,6 +17,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   
   events: Event[] = [];
   selectedEvents: Event[] = [];
+  selectedLocation: Location;
   detailsHeight: number = 0;
   map: LeafletMap;
   locations: Location[];
@@ -167,8 +168,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
           direction: "bottom"
         }).addTo(this.map);
 
-        m.bindPopup(htmlInfo, {
-        }).addTo(this.map)
+      //   m.bindPopup(htmlInfo, {
+      //   }).addTo(this.map)
       }
     }
   }
@@ -196,12 +197,14 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.selectedMarker = e.target;
-    this.detailsHeight = 20;
+    this.detailsHeight = 30;
 		this.zone.run(() => {
       this.map.setView(this.selectedMarker.getLatLng(), this.map.getZoom());
       var myIcon = this.markedIcon;
       e.target.setIcon(myIcon);
-
+      console.log(e.target)
+      this.selectedLocation = this.locations.find(location =>location.id == e.target.locationID);
+      console.log(this.selectedLocation)
       this.selectedEvents = this.getEventsToLocation(e.target.locationID);
     });
   }

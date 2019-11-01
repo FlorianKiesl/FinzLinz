@@ -11,7 +11,7 @@
   // top: 122px;
 }
 
-.map-content > .bottombar{
+.map-content > .bottombar > .bottombar_events{
   /*display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
   /*display: -ms-flexbox;  /* TWEENER - IE 10 */
   /*display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
@@ -67,4 +67,8 @@
 
 .mat-raised-button {
   line-height: normal;
+}
+
+.small_text {
+  font-size: small;
 }

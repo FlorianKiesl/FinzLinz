@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -9,6 +9,9 @@ import { FormControl } from '@angular/forms';
 export class DatefilterComponent implements OnInit {
   @Input() minDate:Date;
   @Input() maxDate:Date;
+
+  // @Output() dateStartFormControl:FormControl;
+  // @Output() dateEndFormControl:FormControl;
 
   dateStart = new FormControl(new Date());
   dateEnd = new FormControl(new Date());

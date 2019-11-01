@@ -17,6 +17,7 @@ export class EventdetailsComponent implements OnInit {
     }
 
   ngOnInit() {
+    
   }
 
   onHomeClick(): void {

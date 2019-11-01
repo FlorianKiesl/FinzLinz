@@ -19,7 +19,9 @@ export class Event {
         let occurences = [];
         for (let item of this.date){
             let nextOccurence = item;
-            while (nextOccurence.dFrom.valueOf() <= this.lastdate.valueOf()) {
+            while (nextOccurence.dFrom.valueOf() <= this.lastdate.valueOf() 
+                && !occurences.find(item => item.dFrom.valueOf() ==  nextOccurence.dFrom.valueOf())
+            ) {
                 occurences.push(nextOccurence);
                 let dFromNext = new Date(nextOccurence.dFrom)
                 let dToNext = new Date(nextOccurence.dTo)
@@ -28,8 +30,16 @@ export class Event {
                 );
             }
         }
-
+        occurences.sort((occurence1, occurence2) => occurence1.dFrom.valueOf() - occurence2.dFrom.valueOf());
+        if (this.id == 527618) {
+            console.log(occurences)
+            console.log(this.date)
+        }
         return occurences;
+    }
+
+    public getAvailableEventOccurences():EventOccurence[] {
+        return this.date.filter(eventOccurence => eventOccurence.dFrom.valueOf() >= (new Date().setHours(0, 0, 0, 0))).sort((occurence1, occurence2) => occurence1.dFrom.valueOf() - occurence2.dFrom.valueOf());
     }
 
     public isEventInTimeRange(startDate:Date, endDate:Date):boolean {

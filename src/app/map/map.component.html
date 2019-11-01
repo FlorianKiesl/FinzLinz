@@ -22,11 +22,17 @@
         <button mat-button color="primary" (click)="openEventDetails(event)"><mat-icon>visibility</mat-icon> Details</button>
     </mat-card-actions>
     </mat-card> -->
-
-    <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="utils.openEventDetails(event)">
-      <div><span>{{ event.title }}</span></div>
-      <app-starrating class="app-starrating-map" [rating]="event.rating"></app-starrating>
-    </button>
-
+    <mat-toolbar color="primary">
+      <span>
+          <h1>{{ selectedLocation ? selectedLocation.name: ""}}</h1>
+          <div class="small_text">{{selectedEvents.length}} Veranstaltung(en)</div>
+      </span>
+    </mat-toolbar>
+    <div class="bottombar_events">
+      <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="utils.openEventDetails(event)">
+        <div><span>{{ event.title }}</span></div>
+        <app-starrating class="app-starrating-map" [rating]="event.rating"></app-starrating>
+      </button>
+    </div>
   </div>
 </div>

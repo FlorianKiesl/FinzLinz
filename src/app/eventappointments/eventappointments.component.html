@@ -1,11 +1,10 @@
 <mat-toolbar>
   <div>4 Termin(e) ausgewählt</div>
     <span class="example-spacer"></span>
-    <button mat-icon-button (click)="select_all()"><mat-icon>select_all</mat-icon></button>
-    <button mat-icon-button (click)="exort()"  matBadge="4"><mat-icon>list</mat-icon></button>
-    <button mat-icon-button (click)="exort()"  matBadge="4"><mat-icon>share</mat-icon></button>
+    <button mat-icon-button (click)="selectionList.selectedOptions.selected.length > 0 ? selectionList.deselectAll() : selectionList.selectAll()"><mat-icon>select_all</mat-icon></button>
+    <button mat-icon-button (click)="export()"  matBadge="{{selectedOptions?.length || null}}"><mat-icon>share</mat-icon></button>
 </mat-toolbar>
-<mat-accordion>
+<!-- <mat-accordion>
   <mat-expansion-panel>
       <mat-expansion-panel-header>
           <mat-panel-title>
@@ -17,9 +16,9 @@
       </mat-expansion-panel-header>
       <app-datefilter class="datefilter-container"></app-datefilter>
   </mat-expansion-panel>
-</mat-accordion>
-<mat-selection-list>
-  <mat-list-option *ngFor="let occurence of event.date">
+</mat-accordion> -->
+<mat-selection-list [(ngModel)]="selectedOptions" (selectionChange)="this.selectionListChanged($event)" #selectionList>
+  <mat-list-option *ngFor="let occurence of this.dates; let i = index" [value]="i">
     {{ occurence.getString() }}
   </mat-list-option>
 </mat-selection-list>
