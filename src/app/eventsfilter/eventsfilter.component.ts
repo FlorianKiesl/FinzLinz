@@ -93,7 +93,6 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     if (this.dateEnd) {
       this.dateEnd.valueChanges.subscribe(value => this.endDateChanged(value));
     }
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,6 +110,10 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
     if (changes['categories']) {
       this.filteredCategories = this.events ? this.filterCategoriesByEvents(this.categories, this.events) : this.categories;
+    }
+
+    if (this.events && this.organizers && this.categories) {
+      this.onToday();
     }
   }
 

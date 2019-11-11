@@ -8,6 +8,7 @@ import { Category } from './category';
 import { CategoryService } from './category.service';
 import { EventsfilterService } from './eventsfilter.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-root',
@@ -28,25 +29,25 @@ export class AppComponent implements OnInit {
     private organizerService: OrganizerService, 
     private categoryService: CategoryService,
     private eventsfilterService: EventsfilterService,
+    private loginService: LoginService,
     private route:Router) {
-      // this.filter = new Map<String, any>();
       this.route.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
-          this.onFilterChanged(this.filter)
+          this.onFilterChanged(this.eventsfilterService.getFilterMap())
         }
       });
   }
 
   setEvents(): void {
     this.eventService.getEvents().subscribe(eventsParam => {
-      this.events = eventsParam.sort( (a, b) => a.title.localeCompare(b.title) );
+      this.events = eventsParam.sort( (a, b) => a.title.localeCompare(b.title));
       this.onFilterChanged(
         new Map<String, any>().set(
-            'filteredEvents', this.events
+            'filteredEvents', this.eventsfilterService.filterEventsByDates(this.events, new Date(), new Date())
           ).set(
-            'dateStart', undefined
+            'dateStart', new Date()
           ).set(
-            'dateEnd', undefined)
+            'dateEnd', new Date())
         );
     });
   }
@@ -70,6 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   onFilterChanged(filterMap: Map<String, any>){
+    console.log(filterMap)
     this.eventsfilterService.filterEvents(filterMap);
     this.filter = filterMap;
   }
@@ -78,5 +80,11 @@ export class AppComponent implements OnInit {
     if (event.index == 1) {
       console.log(event);
     }
+  }
+
+  onLogin(){
+    this.loginService.login().subscribe(e => {
+      console.log(e);
+    })
   }
 }

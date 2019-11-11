@@ -12,9 +12,10 @@ import { UtilsService } from '../utils.service';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() filter: Map<String, any>;
+  //@Input() filter: Map<String, any>;
   @Input() organizers: Organizer[];
 
+  filter: Map<String, any>;
   sortItem: string = "Sortiert nach";
   sortedItem = 2;
   events: Event[] = [];
@@ -35,15 +36,19 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.filter = this.eventsfilterService.getFilterMap();
-
+    this.events = this.filter ? this.filter.get("filteredEvents"): undefined;
+    this.onSortByNextEventClick();
+    
     this.subscription = this.eventsfilterService.eventsfilter.subscribe( filterMap => {
-      this.filter = filterMap;
-      this.events = this.filter.get('filteredEvents');
+        this.filter = filterMap;
+        this.events = this.filter.get('filteredEvents');
+        this.onSortByNextEventClick();
       }
     );
 
-    this.events = this.filter ? this.filter.get("filteredEvents"): undefined;
+    
     this.setOrganizers();
+
     // navigator.geolocation.getCurrentPosition(this.displayLocationInfo, this.handleLocationError, { maximumAge: 1500000, timeout: 0 })
   }
 
@@ -85,13 +90,13 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   // }
   
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-    if (changes["filter"]) {
-      this.events = this.filter.get("filteredEvents");
-      if (this.events) {
-        this.onSortByNextEventClick();
-      }
-    }
+    // console.log(changes);
+    // if (changes["filter"]) {
+    //   this.events = this.filter.get("filteredEvents");
+    //   if (this.events) {
+    //     this.onSortByNextEventClick();
+    //   }
+    // }
   }
 
   onSortByNameClick() {
@@ -100,22 +105,25 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSortByNextEventClick() {
-    this.events.sort(
-      function(e1, e2)  {
-        let e1Date = e1.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
-        let e2Date = e2.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
-
-        if (e1Date && e2Date) {
-          return e1Date.dFrom.valueOf() - e2Date.dFrom.valueOf();
-        }
-        else if (e1Date && !e2Date) {
-          return 1
-        }
-        else {
-          return -1
-        }
-      }.bind(this)
-    )
+    if (this.events){
+      console.log(this.filter)
+      this.events.sort(
+        function(e1, e2)  {
+          let e1Date = e1.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
+          let e2Date = e2.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
+  
+          if (e1Date && e2Date) {
+            return e1Date.dFrom.valueOf() - e2Date.dFrom.valueOf();
+          }
+          else if (e1Date && !e2Date) {
+            return 1
+          }
+          else {
+            return -1
+          }
+        }.bind(this)
+      )
+    }
     this.sortedItem = 2;
   }
 
