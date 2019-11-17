@@ -12,7 +12,6 @@ import { UtilsService } from '../utils.service';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit, OnChanges, OnDestroy {
-  //@Input() filter: Map<String, any>;
   @Input() organizers: Organizer[];
 
   filter: Map<String, any>;
@@ -48,8 +47,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
     
     this.setOrganizers();
-
-    // navigator.geolocation.getCurrentPosition(this.displayLocationInfo, this.handleLocationError, { maximumAge: 1500000, timeout: 0 })
   }
 
   ngOnDestroy(): void {
@@ -61,33 +58,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
       this.organizers = organizors.sort( (a, b) => a.name.localeCompare(b.name) );
     });
   }
-
-  // displayLocationInfo(position) {
-  //   const lng = position.coords.longitude;
-  //   const lat = position.coords.latitude;
-  
-  //   console.log(`longitude: ${lng} | latitude: ${lat}`);
-  // }
-
-  // handleLocationError(error) {
-  //   console.log(error.code);
-  //   switch (error.code) {
-      
-  //     case 3:
-  //       // timeout was hit, meaning nothing's in the cache
-  //       // let's provide a default location:
-  //       this.displayLocationInfo({ coords: { longitude: 33.631839, latitude: 27.380583 } });
-  
-  //       // now let's make a non-cached request to get the actual position
-  //       navigator.geolocation.getCurrentPosition(this.displayLocationInfo, this.handleLocationError);
-  //       break;
-  //     case 2:
-  //       // ...
-  //       break;
-  //     case 1:
-  //     // ...
-  //   }
-  // }
   
   ngOnChanges(changes: SimpleChanges) {
     // console.log(changes);
@@ -133,12 +103,10 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSortByNearestEventClick() {
-    //this.events.sort((e1, e2) => e1.title.localeCompare(e2.title))
     this.sortedItem = 4;
   }
 
   onSortByCategorieClick() {
-    //this.events.sort((e1, e2) => e1.category.localeCompare(e2.organizer["#text"]))
     this.sortedItem = 5;
   }
 
@@ -151,6 +119,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
 
   createEventICSFile(event:Event){
     let event_date = event.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
-    this.utils.createEventICSFile(event, event_date)
+    this.utils.createEventICSFile(event, [event_date])
   }
 }

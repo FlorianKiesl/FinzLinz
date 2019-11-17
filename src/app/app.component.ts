@@ -71,7 +71,6 @@ export class AppComponent implements OnInit {
   }
 
   onFilterChanged(filterMap: Map<String, any>){
-    console.log(filterMap)
     this.eventsfilterService.filterEvents(filterMap);
     this.filter = filterMap;
   }

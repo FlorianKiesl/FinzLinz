@@ -17,9 +17,11 @@
       <app-datefilter class="datefilter-container"></app-datefilter>
   </mat-expansion-panel>
 </mat-accordion> -->
-<mat-selection-list [(ngModel)]="selectedOptions" (selectionChange)="this.selectionListChanged($event)" #selectionList>
-  <mat-list-option *ngFor="let occurence of this.dates; let i = index" [value]="i">
-    {{ occurence.getString() }}
-  </mat-list-option>
-</mat-selection-list>
+<div id="dates-container">
+  <mat-selection-list [(ngModel)]="selectedOptions" (selectionChange)="this.selectionListChanged($event)" #selectionList>
+    <mat-list-option *ngFor="let occurence of this.dates; let i = index" [value]="i">
+      {{ occurence.getString() }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
 

@@ -1,4 +1,4 @@
-<div class="organizer-container" *ngIf="organizer">
+<div class="organizer-container" *ngIf="organizer; else noOrganizer">
   <h1>{{organizer.name}}</h1>
   <p>Adresse: {{organizer.street}}, {{organizer.postcode}} {{organizer.city}}</p>
   <p>Telefonnummer: {{organizer.telephone}}</p>
@@ -11,3 +11,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #noOrganizer>
+  Es gibt leider keine Daten zu diesem Veranstalter.
+</ng-template>

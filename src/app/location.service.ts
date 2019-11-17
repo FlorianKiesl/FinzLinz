@@ -19,4 +19,10 @@ export class LocationService extends BaseService{
       catchError(this.handleError('getLocations', []))
     );
   }
+
+  getLocation(id:number): Observable<Location> {
+    return this.http.get<Location>(this.httpURL + '/' + id).pipe(
+      catchError(this.handleError('getLocation', undefined))
+    )
+  }
 }

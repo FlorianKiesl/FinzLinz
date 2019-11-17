@@ -4,13 +4,15 @@ import { MatDialog } from '@angular/material';
 import { Event } from './event';
 import { saveAs } from 'file-saver';
 import { formatDate } from '@angular/common';
+import { LocationService } from './location.service';
+import { async } from 'q';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
 
-  constructor(private eventDetailsDialog:MatDialog){
+  constructor(private eventDetailsDialog:MatDialog, private locationService:LocationService){
 
   }
 
@@ -32,22 +34,19 @@ export class UtilsService {
   }
 
   // ToDo: try to pass only needed data...like title, date, location,...
-  createEventICSFile(event:Event, event_date){
+  createEventICSFile(event:Event, event_dates){
+    var vevent = ""
+    var idx = 0
+    for (let event_date of event_dates) {
+      vevent = vevent + this.createEventString(event, event_date, idx)
+      ++idx
+    }
+
     var content = 
       'BEGIN:VCALENDAR'+ '\r\n' +
-      'PRODID:Calendar'+ '\n' +
+      'PRODID:FinzLinzApp'+ '\n' +
       'VERSION:2.0'+ '\n' +
-      'BEGIN:VEVENT'+ '\n' +
-      'UID:0@default'+ '\n' +
-      'CLASS:PUBLIC'+ '\n' +
-      'DESCRIPTION:' + event.title + '\n' +
-      'DTSTAMP;VALUE=DATE-TIME:' + formatDate(new Date(Date.now()),  'yyyyMMddTHHmmss', 'deAT') + '\n' +
-      'DTSTART;VALUE=DATE-TIME:'+ formatDate(event_date.dFrom, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
-      'DTEND;VALUE=DATE-TIME:'+ formatDate(event_date.dTo, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
-      //how to get organizername? 
-      'LOCATION:' + event.organizer +  '\n' +
-      'TRANSP:TRANSPARENT' + '\n' +
-      'END:VEVENT' + '\n' +
+      vevent +
       'END:VCALENDAR'
     var filename = 'export.ics'
 
@@ -56,6 +55,21 @@ export class UtilsService {
     });
     
     saveAs(blob, filename);
+  }
+
+  private createEventString(event, event_date, uid_):string {
+    return 'BEGIN:VEVENT'+ '\n' +
+    'UID:' + uid_ + '@LinzFinzApp' + '\n' +
+    'CLASS:PUBLIC'+ '\n' +
+    'DESCRIPTION:' + event.title + '\n' +
+    'SUMMARY:' + event.title+ '\n' +
+    'DTSTAMP;VALUE=DATE-TIME:' + formatDate(new Date(Date.now()),  'yyyyMMddTHHmmss', 'deAT') + '\n' +
+    'DTSTART;VALUE=DATE-TIME:'+ formatDate(event_date.dFrom, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
+    'DTEND;VALUE=DATE-TIME:'+ formatDate(event_date.dTo, 'yyyyMMddTHHmmss', 'deAT') + '\n' +
+    'LOCATION:' + event.location['#text'] +  '\n' +
+    //'GEO:' + event.location.latitude + ', ' + event.location.longitude+ '\n' +
+    'TRANSP:TRANSPARENT' + '\n' +
+    'END:VEVENT' + '\n'
   }
 
   public static getDateFormated(date:Date): string{

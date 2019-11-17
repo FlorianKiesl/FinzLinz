@@ -4,6 +4,7 @@ import { EventOccurence } from '../eventOccurence';
 import { FormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatListOptionBase, MatListOption } from '@angular/material';
+import { UtilsService } from '../utils.service';
 
 @Component({
   selector: 'app-eventappointments',
@@ -18,7 +19,7 @@ export class EventappointmentsComponent implements OnInit {
   private selectedOptions:number[] = [];
   private count = 5;
 
-  constructor() { }
+  constructor(private utilservice:UtilsService) { }
 
   ngOnInit() {
     this.dates = this.event.getAvailableEventOccurences();
@@ -29,5 +30,14 @@ export class EventappointmentsComponent implements OnInit {
   private selectionListChanged(value:any){
     console.log(value);
     console.log(this.selectedOptions)
+  }
+
+  export() {
+    var event_dates = []
+    for (let selection of this.selectedOptions) {
+      event_dates.push(this.dates[selection])
+    }
+    console.log(event_dates)
+    this.utilservice.createEventICSFile(this.event, event_dates)
   }
 }
