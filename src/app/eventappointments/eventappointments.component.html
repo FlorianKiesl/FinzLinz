@@ -1,22 +1,9 @@
 <mat-toolbar>
-  <div>4 Termin(e) ausgewählt</div>
+  <div>{{selectedOptions?.length }} Termine ausgewählt</div>
     <span class="example-spacer"></span>
     <button mat-icon-button (click)="selectionList.selectedOptions.selected.length > 0 ? selectionList.deselectAll() : selectionList.selectAll()"><mat-icon>select_all</mat-icon></button>
     <button mat-icon-button (click)="export()"  matBadge="{{selectedOptions?.length || null}}"><mat-icon>share</mat-icon></button>
 </mat-toolbar>
-<!-- <mat-accordion>
-  <mat-expansion-panel>
-      <mat-expansion-panel-header>
-          <mat-panel-title>
-              <mat-icon>filter_list</mat-icon>
-          </mat-panel-title>
-          <mat-panel-description>
-              Wähle einen Zeitraum
-          </mat-panel-description>
-      </mat-expansion-panel-header>
-      <app-datefilter class="datefilter-container"></app-datefilter>
-  </mat-expansion-panel>
-</mat-accordion> -->
 <div id="dates-container">
   <mat-selection-list [(ngModel)]="selectedOptions" (selectionChange)="this.selectionListChanged($event)" #selectionList>
     <mat-list-option *ngFor="let occurence of this.dates; let i = index" [value]="i">
