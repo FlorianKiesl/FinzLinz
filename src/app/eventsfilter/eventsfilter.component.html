@@ -38,7 +38,7 @@
             </div>
 
             <div class="categorie-container">
-                <mat-form-field class="categorie">
+                <!-- <mat-form-field class="categorie">
                     <mat-select #categoriesSelection class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
                         <mat-select-trigger>{{categoriesFormControl.value?.length > 0 ? categoriesFormControl.value[0].name : ''}}
                             <span *ngIf="categoriesFormControl.value?.length > 1" class="example-additional-selection">
@@ -50,7 +50,25 @@
                     <button mat-button *ngIf="categoriesFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearCategories(categoriesSelection)">
                         <mat-icon>close</mat-icon>
                     </button>
-                </mat-form-field>
+                </mat-form-field> -->
+
+                <mat-form-field class="categorie">
+                        <mat-select  #categoriesSelection class="categorie" placeholder="Kategorien" [formControl]="categoriesFormControl" multiple>
+                            <mat-select-trigger>{{categoriesFormControl.value?.length > 0 ? categoriesFormControl.value[0].name : ''}}
+                                <span *ngIf="categoriesFormControl.value?.length > 1" class="example-additional-selection">
+                                (+{{categoriesFormControl.value.length - 1}} {{categoriesFormControl.value?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-optgroup *ngFor="let category of filteredCategories" [label]="category.name">
+                                <mat-option [value]="category">alle</mat-option>
+                                <mat-option *ngFor="let subcategory of category.subCategories" [value]="subcategory">{{subcategory.name}}</mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                        <button mat-button *ngIf="categoriesFormControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearCategories(categoriesSelection)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                      </mat-form-field>
+
             </div>
 
             <div class="calender-container">

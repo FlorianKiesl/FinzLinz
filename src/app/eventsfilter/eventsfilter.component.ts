@@ -110,6 +110,7 @@ export class EventsfilterComponent implements OnInit, OnChanges {
 
     if (changes['categories']) {
       this.filteredCategories = this.events ? this.filterCategoriesByEvents(this.categories, this.events) : this.categories;
+      console.log(this.filteredCategories)
     }
 
     if (this.events && this.organizers && this.categories) {
@@ -298,8 +299,8 @@ export class EventsfilterComponent implements OnInit, OnChanges {
     );
   }
 
-  private filterCategoriesByEvents(categories:Category[], events:Event[]):Category[] {
-    return categories.filter(category =>
+  private filterCategoriesByEvents(categories:Category[], events:Event[]):Category[] {   
+    let mainCategories =  categories.filter(category =>
       events.findIndex(event => 
         event.categories ? 
         (Array.isArray(event.categories.category) ? 
@@ -307,6 +308,14 @@ export class EventsfilterComponent implements OnInit, OnChanges {
         ) : false
       ) >= 0
     )
+    
+    for (let item of mainCategories){
+      if (item.subCategories.length > 0) {
+        item.subCategories = this.filterCategoriesByEvents(item.subCategories, events)
+      }
+    }
+
+    return mainCategories
   }
 
   private getOrganizerFilterValue():string {
