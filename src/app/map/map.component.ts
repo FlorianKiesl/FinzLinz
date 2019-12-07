@@ -74,6 +74,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     this.subscription = this.eventsfilterService.eventsfilter.subscribe( filterMap => {
       this.filter = filterMap;
       this.events = this.filter.get('filteredEvents');
+      this.detailsHeight = 0;
       if (this.map) {
         for(var i = 0; i < this.mapMarkers.length; i++){
           this.map.removeLayer(this.mapMarkers[i]);
@@ -85,6 +86,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log(changes)
   //   if (changes['filter']){
   //     this.events = this.filter.get('filteredEvents');
   //   }
@@ -172,6 +174,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
 
   refresh() {
+    this.selectedEvents = [];
     this.detailsHeight = 1;
     this.map.invalidateSize();
     this.detailsHeight = 0;
