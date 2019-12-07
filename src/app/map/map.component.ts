@@ -132,8 +132,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
       this.map.removeLayer(this.mapMarkers[i]);
     }
     this.addMarkers();
-    var group = featureGroup(this.mapMarkers).addTo(map);
-    map.fitBounds(group.getBounds());
+
   }
 
   private addMarkers() {
@@ -157,9 +156,12 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
         m.bindTooltip(htmlInfo, {
           direction: "bottom"
-        }).addTo(this.map);
+        }).addTo(this.map)
       }
     }
+
+    var group = featureGroup(this.mapMarkers);
+    this.map.fitBounds(group.getBounds());
   }
 
   changeIcons(){
