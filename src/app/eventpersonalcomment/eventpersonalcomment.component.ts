@@ -21,7 +21,6 @@ export class EventpersonalcommentComponent implements OnInit {
 
   setRating(star:number){
     this.rating = star == this.rating ? -1 : star;
-    console.log(this.rating)
   }
 
   private addPersonalComment() {
@@ -43,5 +42,8 @@ export class EventpersonalcommentComponent implements OnInit {
     }
 
     if (emitNewComment) this.newComment.emit(new Comment(-1, this.userName, -1, new Date(), this.rating, this.text));
+    this.userName = "";
+    this.rating = 0;
+    this.text = "";
   }
 }

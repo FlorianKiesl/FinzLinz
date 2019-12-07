@@ -7,10 +7,11 @@ import { Link } from './link';
 
 export class Event {
 
-    constructor(public id:number, public title: string, public description: string,
+    constructor(public id:number, public _id:string, public title: string, public description: string,
          public firstdate: Date, public lastdate: Date, public date:EventOccurence[], public location: Location,
-         public categories: any, public organizer: EventOrganizer, public datumstring: string, public rating:number, 
-         public ratingCount:number, public links:Link[]) {
+         public categories: any, public organizer: EventOrganizer, public datumstring: string, 
+         public ratingCount:number, public ratingsFive:number, public ratingsFour:number, public ratingsThree:number,
+         public ratingsTwo:number, public ratingsOne:number, public avgRating:number, public links:Link[]) {
             this.date = this.getRepeatingOccurencesDates();
     }
 
@@ -31,10 +32,6 @@ export class Event {
             }
         }
         occurences.sort((occurence1, occurence2) => occurence1.dFrom.valueOf() - occurence2.dFrom.valueOf());
-        if (this.id == 527618) {
-            console.log(occurences)
-            console.log(this.date)
-        }
         return occurences;
     }
 
@@ -48,8 +45,6 @@ export class Event {
     }
 
     public getNextEventDate():EventOccurence{
-        console.log(this)
-        //return this.date.find((eventOccurence) => eventOccurence.dTo.valueOf() >= Date.now())
         return this.getNextEventDateBetween(new Date(Date.now()), undefined)
     }
 
@@ -114,6 +109,7 @@ export class EventAdapter implements Adapter<Event>{
 
         return new Event(
             item.id,
+            item._id,
             item.title ? item.title : '',
             item.description,
             new Date(item.firstdate),
@@ -123,8 +119,13 @@ export class EventAdapter implements Adapter<Event>{
             item.categories,
             item.organizer,
             item.datumstring,
-            item.rating ? item.rating : 0,
-            item.ratingCount ? item.ratingCount : 0,
+            item.ratingCount,
+            item.ratingsFive,
+            item.ratingsFour,
+            item.ratingsThree,
+            item.ratingsTwo,
+            item.ratingsOne,
+            item.avgRating,
             links
         );
     }

@@ -20,4 +20,10 @@ export class EventService extends BaseService {
       catchError(super.handleError('getEvents', []))
     );
   }
+
+  getEvent(id:string):Observable<Event> {
+    return this.http.get<Event>(this.httpURL + '/' + id).pipe(
+      map(data => this.adapter.adapt(data))
+    )
+  }
 }

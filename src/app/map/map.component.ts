@@ -22,19 +22,11 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   map: LeafletMap;
   locations: Location[];
   mapMarkers: Marker<any>[] = [];
-  selectedMarker: Marker;
+  selectedMarker: EventMarker;
   subscription: Subscription;
 
   layer: Layer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
-  });
-
-
-  defaultIcon: Icon = icon({
-    iconSize: [ 25, 41 ],
-    iconAnchor: [ 13, 41 ],
-    iconUrl: 'leaflet/marker-icon.png',
-    shadowUrl: 'leaflet/marker-shadow.png'
   });
 
   markedIcon: Icon = icon({
@@ -61,8 +53,6 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     private zone: NgZone, private utils: UtilsService) { }
 
   ngOnInit() {
-    console.log('hallo');
-    //console.log(L.map('map'));
     if (this.map) {
       for(var i = 0; i < this.mapMarkers.length; i++){
         this.map.removeLayer(this.mapMarkers[i]);
@@ -148,7 +138,6 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     for (let location of this.locations) {
       var eventsToLocation = this.getEventsToLocation(location["id"]);
       if (eventsToLocation.length > 0){
-        //console.log(location);
         if (location.latitude == undefined && location.longitude == undefined) {
           //ToDo: If 2 marker will have the same longitude latitude, the first marker will be overwritten => make dictionary for places with latlng as key. BUt do this in the REST API
           location.latitude = 48.30639;
@@ -159,7 +148,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
           location.id
         );
         
-        m.setIcon(this.defaultIcon);
+        m.setIcon(this.utils.defaultIcon);
 
         m.on('click', this.onMarkerClick.bind(this))
         this.mapMarkers.push(m);
@@ -167,16 +156,13 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
         m.bindTooltip(htmlInfo, {
           direction: "bottom"
         }).addTo(this.map);
-
-      //   m.bindPopup(htmlInfo, {
-      //   }).addTo(this.map)
       }
     }
   }
 
   changeIcons(){
     this.mapMarkers.forEach(element => {
-      element.setIcon(this.defaultIcon)
+      element.setIcon(this.utils.defaultIcon)
     });
   }
 
@@ -185,15 +171,11 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     this.detailsHeight = 1;
     this.map.invalidateSize();
     this.detailsHeight = 0;
-    console.log(this.map.getSize()) 
-    console.log(window.innerHeight)
-
   }
 
   onMarkerClick(e) {
-    console.log(this.events)
     if (this.selectedMarker) {
-      this.selectedMarker.setIcon(this.defaultIcon); // Maybe use here a marker which shows that this has been already viewed...
+      this.selectedMarker.setIcon(this.utils.defaultIcon); // Maybe use here a marker which shows that this has been already viewed...
     }
 
     this.selectedMarker = e.target;
@@ -202,12 +184,18 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
       this.map.setView(this.selectedMarker.getLatLng(), this.map.getZoom());
       var myIcon = this.markedIcon;
       e.target.setIcon(myIcon);
-      console.log(e.target)
       this.selectedLocation = this.locations.find(location =>location.id == e.target.locationID);
-      console.log(this.selectedLocation)
       this.selectedEvents = this.getEventsToLocation(e.target.locationID);
     });
   }
+
+  openEventDetails(event:Event) {
+    this.utils.openEventDetails(event).subscribe(eventItem => {
+      this.events[this.events.findIndex(el => el._id === eventItem._id)] = eventItem;
+      this.selectedEvents = this.getEventsToLocation(this.selectedMarker.locationID);
+    })
+  }
+
 }
 
 export class EventMarker extends Marker{

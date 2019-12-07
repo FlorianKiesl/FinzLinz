@@ -1,10 +1,10 @@
 <mat-toolbar color="primary">
     <span class="example-spacer">
-      <app-starrating [rating]="event.rating"></app-starrating>
+      <app-starrating [rating]="event.avgRating"></app-starrating>
     </span>
     <button mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
 </mat-toolbar>
-<h1 id="caption" color="primary" mat-dialog-title [innerHTML]>{{event?.title}}</h1>
+<h1 id="caption" color="primary" mat-dialog-title [innerHTML]="event.title"></h1>
 
 <mat-dialog-content  id="dialog-content">
   <mat-tab-group class="mat-tab-fill-height" mat-align-tabs="center" (selectedTabChange)="organizer.refresh()">
@@ -14,7 +14,7 @@
 
     <mat-tab label="Kommentare">
       <app-eventpersonalcomment hidden></app-eventpersonalcomment>
-      <app-eventcomments [event]="event"></app-eventcomments>
+      <app-eventcomments [event]="event" (eventChanged)="eventChanged($event)"></app-eventcomments>
     </mat-tab>
 
     <mat-tab label="Termine">

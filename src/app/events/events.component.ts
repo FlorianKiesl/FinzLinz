@@ -60,13 +60,6 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   }
   
   ngOnChanges(changes: SimpleChanges) {
-    // console.log(changes);
-    // if (changes["filter"]) {
-    //   this.events = this.filter.get("filteredEvents");
-    //   if (this.events) {
-    //     this.onSortByNextEventClick();
-    //   }
-    // }
   }
 
   onSortByNameClick() {
@@ -120,5 +113,11 @@ export class EventsComponent implements OnInit, OnChanges, OnDestroy {
   createEventICSFile(event:Event){
     let event_date = event.getNextEventDateBetween(this.filter.get('dateStart'), this.filter.get('dateEnd'));
     this.utils.createEventICSFile(event, [event_date])
+  }
+
+  openEventDetails(event:Event) {
+    this.utils.openEventDetails(event).subscribe(eventItem => {
+      this.events[this.events.findIndex(el => el._id === eventItem._id)] = eventItem;
+    })
   }
 }

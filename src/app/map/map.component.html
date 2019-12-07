@@ -14,9 +14,9 @@
       </span>
     </mat-toolbar>
     <div class="bottombar_events">
-      <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="utils.openEventDetails(event)">
+      <button mat-raised-button class="event-card" *ngFor="let event of selectedEvents" (click)="openEventDetails(event)">
         <div><span>{{ event.title }}</span></div>
-        <app-starrating class="app-starrating-map" [rating]="event.rating"></app-starrating>
+        <app-starrating class="app-starrating-map" [rating]="event.avgRating"></app-starrating>
       </button>
     </div>
   </div>

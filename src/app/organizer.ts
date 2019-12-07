@@ -6,4 +6,6 @@ export class Organizer {
     postcode: string;
     street: string;
     telephone: string;
+    latitude:number;
+    longitude:number;
 }

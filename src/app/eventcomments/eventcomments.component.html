@@ -1,12 +1,12 @@
 <div class="comments-overview">
-  <div class="comments-overview-heading"><span>Gesamt: {{ sumRatings }} Bewertunge(n)</span></div>
+  <div class="comments-overview-heading"><span>Gesamt: {{ event.ratingCount }} Bewertunge(n)</span></div>
   <div>
       <a><mat-icon>star</mat-icon></a>
       <a><mat-icon>star</mat-icon></a>
       <a><mat-icon>star</mat-icon></a>
       <a><mat-icon>star</mat-icon></a>
       <a><mat-icon>star</mat-icon></a>  
-      <span>{{ percRating5 | percent:'2.0'}} ({{ sumRating5 }})</span>
+      <span>{{ getRatingPerc(event.ratingsFive) | percent:'2.0'}} ({{ event.ratingsFive }})</span>
   </div>
   <div>
     <a><mat-icon>star</mat-icon></a>
@@ -14,7 +14,7 @@
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
-    <span>{{ percRating4 | percent:'2.0'}} ({{ sumRating4 }})</span>
+    <span>{{ getRatingPerc(event.ratingsFour) | percent:'2.0'}} ({{ event.ratingsFour }})</span>
   </div>
   <div>
     <a><mat-icon>star</mat-icon></a>
@@ -22,7 +22,7 @@
     <a><mat-icon>star</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
-    <span>{{ percRating3 | percent:'2.0'}} ({{ sumRating3 }})</span>
+    <span>{{ getRatingPerc(event.ratingsThree) | percent:'2.0'}} ({{ event.ratingsThree }})</span>
   </div>
   <div>
     <a><mat-icon>star</mat-icon></a>
@@ -30,7 +30,7 @@
     <a><mat-icon>star_border</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
-    <span>{{ percRating2 | percent:'2.0'}} ({{ sumRating2 }})</span>
+    <span>{{ getRatingPerc(event.ratingsTwo) | percent:'2.0'}} ({{ event.ratingsTwo }})</span>
   </div>
   <div>
     <a><mat-icon>star</mat-icon></a>
@@ -38,7 +38,7 @@
     <a><mat-icon>star_border</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
     <a><mat-icon>star_border</mat-icon></a>
-    <span>{{ percRating1 | percent:'2.0'}} ({{ sumRating1 }})</span>
+    <span>{{ getRatingPerc(event.ratingsOne) | percent:'2.0'}} ({{ event.ratingsOne }})</span>
   </div>
 </div>
 <mat-divider></mat-divider>

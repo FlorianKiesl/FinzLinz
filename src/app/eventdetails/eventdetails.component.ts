@@ -25,10 +25,14 @@ export class EventdetailsComponent implements OnInit {
   }
 
   close(): void{
-    this.dialogRef.close();
+    this.dialogRef.close(this.event);
   }
   
   onTabClick(event:any) {
     console.log(event)
+  }
+
+  eventChanged(event:Event) {
+    this.event = event
   }
 }

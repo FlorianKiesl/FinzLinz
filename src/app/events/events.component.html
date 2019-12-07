@@ -32,7 +32,7 @@
     <mat-card-header>
       <mat-card-title class="card-container-left" [innerHTML]="event.title"></mat-card-title>
       <mat-card-title class="card-container-right">
-        <app-starrating [rating]="event.rating"></app-starrating>
+        <app-starrating [rating]="event.avgRating"></app-starrating>
       </mat-card-title>
       <mat-card-subtitle> 
         <p>
@@ -56,7 +56,7 @@
       <span [innerHTML]="event.description | slice:0:800"></span> ...
     </mat-card-content>
     <mat-card-actions class="action-buttons">
-        <button mat-button color="primary" (click)="utils.openEventDetails(event)"><mat-icon>visibility</mat-icon> Details</button>
+        <button mat-button color="primary" (click)="openEventDetails(event)"><mat-icon>visibility</mat-icon> Details</button>
         <button mat-button color="primary" (click)="createEventICSFile(event)" download="file.txt"><mat-icon>share</mat-icon> Terminexport</button>
     </mat-card-actions>
     <mat-card-footer>

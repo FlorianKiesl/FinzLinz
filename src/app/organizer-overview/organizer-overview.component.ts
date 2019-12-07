@@ -2,6 +2,8 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Organizer } from '../organizer';
 import { OrganizerService } from '../organizer.service';
 import { Layer, tileLayer, latLng, LeafletEventHandlerFnMap, Map as LeafletMap, Marker } from 'leaflet';
+import { EventMarker } from '../map/map.component';
+import { UtilsService } from '../utils.service';
 
 @Component({
   selector: 'app-organizer-overview',
@@ -26,7 +28,7 @@ export class OrganizerOverviewComponent implements OnInit, OnChanges {
 
   mapMarkers: Marker<any>[] = [];
 
-  constructor(private organizerService:OrganizerService) { }
+  constructor(private organizerService:OrganizerService, private utils:UtilsService) { }
 
   ngOnInit() {
     this.setOrganizers();
@@ -58,6 +60,11 @@ export class OrganizerOverviewComponent implements OnInit, OnChanges {
   //     this.refresh();
   //   }.bind(this));
   //   this.refresh();
+    let m = new EventMarker([ this.organizer.latitude, this.organizer.longitude ], {},
+      this.organizer.id
+    );
+    m.setIcon(this.utils.defaultIcon)
+    m.addTo(this.map)
   }
 
   refresh() {

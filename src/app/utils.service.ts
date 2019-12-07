@@ -6,6 +6,8 @@ import { saveAs } from 'file-saver';
 import { formatDate } from '@angular/common';
 import { LocationService } from './location.service';
 import { async } from 'q';
+import { Icon, icon } from 'leaflet';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,21 +18,25 @@ export class UtilsService {
 
   }
 
-  openEventDetails(event:Event){
-  const eventDetailDialogRef = this.eventDetailsDialog.open(
-      EventdetailsComponent, {
-      data: event,
-      panelClass: "myapp-no-padding-dialog",
-      width: "100%",
-      height: "100%",
-      maxWidth: "100%",
-      maxHeight: "100%",
-      }
-  );
-  eventDetailDialogRef.afterClosed().subscribe(result => {
-      console.log("Dialog closed: ${result}");
-  })
-  console.log(event);
+  public defaultIcon: Icon = icon({
+    iconSize: [ 25, 41 ],
+    iconAnchor: [ 13, 41 ],
+    iconUrl: 'leaflet/marker-icon.png',
+    shadowUrl: 'leaflet/marker-shadow.png'
+  });
+
+  openEventDetails(event:Event):Observable<any> {
+    const eventDetailDialogRef = this.eventDetailsDialog.open(
+        EventdetailsComponent, {
+        data: event,
+        panelClass: "myapp-no-padding-dialog",
+        width: "100%",
+        height: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+        }
+    );
+    return eventDetailDialogRef.afterClosed();
   }
 
   // ToDo: try to pass only needed data...like title, date, location,...

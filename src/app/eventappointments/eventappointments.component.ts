@@ -23,13 +23,11 @@ export class EventappointmentsComponent implements OnInit {
 
   ngOnInit() {
     this.dates = this.event.getAvailableEventOccurences();
-    console.log(this.selectedOptions)
   }
 
 
   private selectionListChanged(value:any){
-    console.log(value);
-    console.log(this.selectedOptions)
+
   }
 
   export() {
@@ -37,7 +35,6 @@ export class EventappointmentsComponent implements OnInit {
     for (let selection of this.selectedOptions) {
       event_dates.push(this.dates[selection])
     }
-    console.log(event_dates)
     this.utilservice.createEventICSFile(this.event, event_dates)
   }
 }
