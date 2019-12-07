@@ -65,6 +65,8 @@ export class OrganizerOverviewComponent implements OnInit, OnChanges {
     );
     m.setIcon(this.utils.defaultIcon)
     m.addTo(this.map)
+
+    this.map.setView(m.getLatLng(), this.map.getZoom());
   }
 
   refresh() {
