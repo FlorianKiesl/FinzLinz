@@ -31,11 +31,8 @@ export class OrganizerOverviewComponent implements OnInit, OnChanges {
   constructor(private organizerService:OrganizerService, private utils:UtilsService) { }
 
   ngOnInit() {
-    this.setOrganizers();
+    this.setOrganizer();
     if (this.map) {
-      for(var i = 0; i < this.mapMarkers.length; i++){
-        this.map.removeLayer(this.mapMarkers[i]);
-      }
       this.redraw(this.map);
     }
   }
@@ -44,9 +41,9 @@ export class OrganizerOverviewComponent implements OnInit, OnChanges {
     //this.refresh()
   }
 
-  setOrganizers(): void {
+  setOrganizer(): void {
     this.organizerService.getOrganizers().subscribe(organizors => {
-      this.organizer = organizors.find( item =>  item.id == this.organizerID);
+      this.organizer = organizors.find(item =>  item.id == this.organizerID);
     });
   }
 
@@ -56,10 +53,6 @@ export class OrganizerOverviewComponent implements OnInit, OnChanges {
 
   public redraw(map: LeafletMap) {
     this.map = map;
-  //   this.map.on("click", function(e) {
-  //     this.refresh();
-  //   }.bind(this));
-  //   this.refresh();
     let m = new EventMarker([ this.organizer.latitude, this.organizer.longitude ], {},
       this.organizer.id
     );
