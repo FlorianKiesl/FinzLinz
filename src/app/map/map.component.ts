@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
-import { icon, latLng, Layer, Map as LeafletMap, marker, Marker, tileLayer, LatLngExpression, MarkerOptions, Icon } from 'leaflet';
+import { icon, latLng, Layer, Map as LeafletMap, marker, Marker, tileLayer, LatLngExpression, MarkerOptions, Icon, FeatureGroup, featureGroup } from 'leaflet';
 import { Event } from '../event';
 import { Location } from '../location';
 import { LocationService } from '../location.service';
@@ -27,7 +27,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   layer: Layer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
-  });
+  }); 
 
   markedIcon: Icon = icon({
     iconSize: [ 25, 41 ],
@@ -132,6 +132,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
       this.map.removeLayer(this.mapMarkers[i]);
     }
     this.addMarkers();
+    var group = featureGroup(this.mapMarkers).addTo(map);
+    map.fitBounds(group.getBounds());
   }
 
   private addMarkers() {
