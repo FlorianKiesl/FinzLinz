@@ -21,9 +21,9 @@ export class EventService extends BaseService {
     );
   }
 
-  getEvent(id:string):Observable<Event> {
+  getEvent(id:number):Observable<Event> {
     return this.http.get<Event>(this.httpURL + '/' + id).pipe(
-      map(data => this.adapter.adapt(data))
+      map(data => this.adapter.adapt(data[0]))
     )
   }
 }

@@ -54,7 +54,7 @@ export class EventcommentsComponent implements OnInit {
     this.commenService.addComment(json).subscribe(
       comment => {
         this.getComments();
-        this.eventService.getEvent(this.event._id).subscribe(
+        this.eventService.getEvent(this.event.id).subscribe(
           eventItem => {
             this.event = eventItem;
             this.eventChanged.emit(eventItem)

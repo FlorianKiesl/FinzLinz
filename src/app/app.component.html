@@ -5,7 +5,7 @@
         <span class="example-spacer"></span>
         <button mat-icon-button routerLink="/map"><mat-icon>map</mat-icon></button>
         <button mat-icon-button routerLink="/"><mat-icon>list</mat-icon></button>
-        <button mat-icon-button (click)="onLogin()"><mat-icon>account_box</mat-icon></button>
+        <button mat-icon-button><mat-icon><a href="https://nobodynhio.com:443/api/oauth/google">account_box</a></mat-icon></button>
     </mat-toolbar>
     <app-eventsfilter (filterChanged)="onFilterChanged($event)" 
         [events]="events" [organizers]="organizers" [categories]="categories">

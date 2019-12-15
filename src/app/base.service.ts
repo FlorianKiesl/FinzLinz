@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError} from 'rxjs/operators';
 
 export class BaseService {
-  private readonly baseURL = 'https://nobodynhio.com:443/api';
+  private readonly baseURL = 'https://nobodynhio.com:443/api'; /*'http://localhost:3000/api' /*'https://nobodynhio.com:443/api';*/
   protected httpURL: string;
 
   constructor(protected http: HttpClient, protected api: string) {

@@ -198,6 +198,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   openEventDetails(event:Event) {
     this.utils.openEventDetails(event).subscribe(eventItem => {
+      console.log(eventItem)
       this.events[this.events.findIndex(el => el._id === eventItem._id)] = eventItem;
       this.selectedEvents = this.getEventsToLocation(this.selectedMarker.locationID);
     })
