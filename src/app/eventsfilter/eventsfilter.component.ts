@@ -6,6 +6,7 @@ import { Event } from '../event';
 import { Organizer } from '../organizer';
 import { Category } from '../category';
 import { MatSelect } from '@angular/material';
+import { EventService } from '../event.service';
 
 @Component({
   selector: 'app-eventsfilter',
@@ -37,17 +38,33 @@ export class EventsfilterComponent implements OnInit, OnChanges {
   public maxDate:Date;
   public filtertext:string;
 
-  constructor() {
+  constructor(private eventService: EventService) {
 
   }
 
   public onFilter() {
-    let filteredEvents = this.filterEventsByTitle(this.filteredEventOptions.copyWithin(-1, -1), this.eventFormControl.value)
-    let filterMap = new Map<String, any>();
-    filterMap.set('filteredEvents', filteredEvents);
-    filterMap.set('dateStart', this.dateStart.value);
-    filterMap.set('dateEnd', this.dateEnd.value)
-    this.filterChanged.emit(filterMap);
+    this.eventService.getEvents().subscribe(data => {
+      console.log(data)
+      this.events = data
+      let filteredEvents = this.filterEventsByTitle(this.filteredEventOptions.copyWithin(-1, -1), this.eventFormControl.value)
+      filteredEvents.forEach(item => {
+        item = data.find(newItem => newItem.id == item.id)
+      })
+      filteredEvents = data.filter(item => {
+        return filteredEvents.findIndex(filteredItem => filteredItem.id == item.id) >= 0
+      })
+      let filterMap = new Map<String, any>();
+      filterMap.set('filteredEvents', filteredEvents);
+      filterMap.set('dateStart', this.dateStart.value);
+      filterMap.set('dateEnd', this.dateEnd.value)
+      this.filterChanged.emit(filterMap);
+    })
+    // let filteredEvents = this.filterEventsByTitle(this.filteredEventOptions.copyWithin(-1, -1), this.eventFormControl.value)
+    // let filterMap = new Map<String, any>();
+    // filterMap.set('filteredEvents', filteredEvents);
+    // filterMap.set('dateStart', this.dateStart.value);
+    // filterMap.set('dateEnd', this.dateEnd.value)
+    // this.filterChanged.emit(filterMap);
     this.expanded = 1;
   }
 
